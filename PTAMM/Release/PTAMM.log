@@ -1,0 +1,489 @@
+﻿Build started 6/4/2015 12:08:09 PM.
+     1>Project "G:\Visual Studio 2013\PTAMM\PTAMM\PTAMM.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IG:\code\\GLCV\include /I"G:\code\\glut-3.7.6-bin\include" /I"G:\code\\FBOLIB-vc12-x86\include" /I"G:\code\CvDraw-x86-vs12\include" /I"G:\code\ReconsOptimization-x86-vs12\include" /I"G:\code\assimp-3.1.1-vs12-x86\include" /I"g:\code\AssimpOpenGL-x86-vs12\include" /I"G:\code\ReconsVoxel-x86-vs12\include" /I"G:\code\\GHOSTLIB-x86-vs12\include" /I"G:\code\\CvSkeleton-x86-vs12\include" /I"G:\code\\pthreads-2-9-1\Pre-built.2\include" /I"G:\code\\zlib-vs12-x86\include" /I"G:\code\\jpeg-vs12-x86\include" /I"G:\code\\libpng-vs12-x86\include" /I"G:\code\\tiff-4.0.3\libtiff" /IG:\code\\LaPack\blas /IG:\code\\LaPack\lapack /I"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Include" /I"G:\code\opencv2.4\opencv\build-self\install\include" /I"G:\code\\glew-1.9.0\include" /IG:\code\\tinyxml\include /I"G:\code\\libcvd-2013" /IG:\code\\TooN /IG:\code\\TooN /I"G:\code\\gvars3-2013" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D GLEW_STATIC /D GLEW_STATIC /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ARReenactmentGame.cpp
+         ARReenactmentGame.cpp
+     1>c:\program files (x86)\microsoft sdks\windows\v7.0a\include\sal_supp.h(57): warning C4005: '__useHeader' : macro redefinition
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\sal.h(2886) : see previous definition of '__useHeader'
+     1>c:\program files (x86)\microsoft sdks\windows\v7.0a\include\specstrings_supp.h(77): warning C4005: '__on_failure' : macro redefinition
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\sal.h(2896) : see previous definition of '__on_failure'
+     1>g:\code\reconsvoxel-x86-vs12\include\recons_voxel.h(46): warning C4244: 'initializing' : conversion from 'int' to 'const float', possible loss of data
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(24): warning C4005: 'glGenFramebuffers' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3776) : see previous definition of 'glGenFramebuffers'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(25): warning C4005: 'glDeleteFramebuffers' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3769) : see previous definition of 'glDeleteFramebuffers'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(26): warning C4005: 'glBindFramebuffer' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3765) : see previous definition of 'glBindFramebuffer'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(27): warning C4005: 'glCheckFramebufferStatus' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3768) : see previous definition of 'glCheckFramebufferStatus'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(28): warning C4005: 'glGetFramebufferAttachmentParameteriv' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3779) : see previous definition of 'glGetFramebufferAttachmentParameteriv'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(29): warning C4005: 'glGenerateMipmap' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3778) : see previous definition of 'glGenerateMipmap'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(30): warning C4005: 'glFramebufferTexture2D' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3773) : see previous definition of 'glFramebufferTexture2D'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(31): warning C4005: 'glFramebufferRenderbuffer' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3771) : see previous definition of 'glFramebufferRenderbuffer'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(33): warning C4005: 'glGenRenderbuffers' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3777) : see previous definition of 'glGenRenderbuffers'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(34): warning C4005: 'glDeleteRenderbuffers' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3770) : see previous definition of 'glDeleteRenderbuffers'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(35): warning C4005: 'glBindRenderbuffer' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3766) : see previous definition of 'glBindRenderbuffer'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(36): warning C4005: 'glRenderbufferStorage' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3783) : see previous definition of 'glRenderbufferStorage'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(37): warning C4005: 'glGetRenderbufferParameteriv' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3780) : see previous definition of 'glGetRenderbufferParameteriv'
+     1>G:\code\FBOLIB-vc12-x86\include\fbolib.h(38): warning C4005: 'glIsRenderbuffer' : macro redefinition
+                 G:\code\glew-1.9.0\include\gl\glew.h(3782) : see previous definition of 'glIsRenderbuffer'
+     1>G:\code\libcvd-2013\cvd/internal/win.h(5): warning C4005: '_WIN32_WINNT' : macro redefinition
+                 C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Include\sdkddkver.h(197) : see previous definition of '_WIN32_WINNT'
+     1>ARReenactmentGame.cpp(84): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(92): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(112): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(125): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(131): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(148): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(152): warning C4244: 'argument' : conversion from 'float' to 'unsigned char', possible loss of data
+     1>ARReenactmentGame.cpp(153): warning C4244: 'argument' : conversion from 'float' to 'unsigned char', possible loss of data
+     1>ARReenactmentGame.cpp(154): warning C4244: 'argument' : conversion from 'float' to 'unsigned char', possible loss of data
+     1>ARReenactmentGame.cpp(157): warning C4018: '<' : signed/unsigned mismatch
+     1>G:\code\TooN\TooN/so3.h(54): warning C4396: 'TooN::operator >>' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
+                 G:\code\TooN\TooN/se3.h(153) : see reference to class template instantiation 'TooN::SO3<Precision>' being compiled
+                 with
+                 [
+                     Precision=double
+                 ]
+                 ARReenactmentGame.cpp(181) : see reference to class template instantiation 'TooN::SE3<double>' being compiled
+     1>G:\code\TooN\TooN/so3.h(55): warning C4396: 'TooN::operator >>' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
+     1>ARReenactmentGame.cpp(213): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(214): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(215): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(216): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(217): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(218): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(219): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(220): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(221): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(222): warning C4244: '=' : conversion from 'TooN::DefaultPrecision' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(223): warning C4244: '=' : conversion from 'TooN::DefaultPrecision' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(224): warning C4244: '=' : conversion from 'TooN::DefaultPrecision' to 'float', possible loss of data
+     1>ARReenactmentGame.cpp(296): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(345): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(346): warning C4244: 'argument' : conversion from 'float' to 'uchar', possible loss of data
+     1>ARReenactmentGame.cpp(353): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(367): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(389): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(435): warning C4018: '<' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(491): warning C4018: '>=' : signed/unsigned mismatch
+     1>ARReenactmentGame.cpp(511): warning C4018: '>=' : signed/unsigned mismatch
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\Visual Studio 2013\PTAMM\Release\PTAMM.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:G:\code\\GLCV\lib /LIBPATH:"G:\code\\glut-3.7.6-bin\\" /LIBPATH:"G:\code\\FBOLIB-vc12-x86\lib" /LIBPATH:"G:\code\CvDraw-x86-vs12\lib" /LIBPATH:"G:\code\ReconsOptimization-x86-vs12\lib" /LIBPATH:"G:\code\assimp-3.1.1-vs12-x86\lib" /LIBPATH:"G:\code\AssimpOpenGL-x86-vs12\lib" /LIBPATH:"G:\code\ReconsVoxel-x86-vs12\lib" /LIBPATH:"G:\code\\GHOSTLIB-x86-vs12\lib" /LIBPATH:"G:\code\\CvSkeleton-x86-vs12\lib" /LIBPATH:"\pthreads-2-9-1\pthreads.2\\" /LIBPATH:"G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86" /LIBPATH:"G:\code\\zlib-vs12-x86\lib" /LIBPATH:"G:\code\\jpeg-vs12-x86\lib" /LIBPATH:"G:\code\\libpng-vs12-x86\lib" /LIBPATH:"G:\code\\tiff-4.0.3\libtiff\\" /LIBPATH:G:\code\\LaPack /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib" /LIBPATH:"G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib" /LIBPATH:"G:\code\\glew-1.9.0\lib\\" /LIBPATH:G:\code\\tinyxml\vs2013\lib /LIBPATH:"G:\code\\libcvd-2013\lib" /LIBPATH:"G:\code\\zlib-vs12-x86\lib" /LIBPATH:"G:\code\\gvars3-2013\lib" OpenGL_OpenCV.lib glut32.lib FBOLIB.lib CV_DRAW.lib recons_optimization.lib AssimpOpenGL.lib assimp.lib recons_voxel.lib GHOSTLIB.lib CV_SKELETON.lib pthreadVCE2.lib zlibstatic.lib jpeg.lib libpng16_static.lib libtiff.lib lapack_win32.lib blas_win32.lib OpenGL32.lib GlU32.lib opencv_core2410.lib opencv_highgui2410.lib opencv_imgproc2410.lib opencv_calib3d2410.lib opencv_video2410.lib opencv_features2d2410.lib glew32s.lib glew32mxs.lib tinyxml.lib libcvd.lib zlibstatic.lib gvars3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:msvcrt.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"G:\Visual Studio 2013\PTAMM\Release\PTAMM.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\Visual Studio 2013\PTAMM\Release\PTAMM.lib" /MACHINE:X86 /SAFESEH /verbose:lib Release\ARDriver.obj
+         Release\ARReenactmentGame.obj
+         Release\ATANCamera.obj
+         Release\Bundle.obj
+         Release\EyeGame.obj
+         Release\Games.obj
+         Release\GhostGame.obj
+         Release\GLWindow2.obj
+         Release\GLWindowMenu.obj
+         Release\HomographyInit.obj
+         Release\KeyFrame.obj
+         Release\main.obj
+         Release\Map.obj
+         Release\MapLockManager.obj
+         Release\MapMaker.obj
+         Release\MapPoint.obj
+         Release\MapSerializer.obj
+         Release\MapViewer.obj
+         Release\MD5.obj
+         Release\MD5Wrapper.obj
+         Release\MiniPatch.obj
+         Release\PatchFinder.obj
+         Release\PTAM2Kinect.obj
+         Release\Relocaliser.obj
+         Release\ShiTomasi.obj
+         Release\ShooterGame.obj
+         Release\ShooterGameTarget.obj
+         Release\SmallBlurryImage.obj
+         Release\System.obj
+         Release\Tracker.obj
+         Release\Utils.obj
+         Release\VideoSource_GHOST.obj
+         
+         Searching libraries
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\LIBCMT.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\OLDNAMES.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winmm.lib:
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\LIBCMT.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\OLDNAMES.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winmm.lib:
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\LIBCMT.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\OLDNAMES.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winmm.lib:
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+         
+         Finished searching libraries
+         Generating code
+         Finished generating code
+         
+         Searching libraries
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\LIBCMT.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\OLDNAMES.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winmm.lib:
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+         
+         Finished searching libraries
+         
+         Searching libraries
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\LIBCMT.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\OLDNAMES.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winmm.lib:
+             Searching G:\code\\GLCV\lib\OpenGL_OpenCV.lib:
+             Searching G:\code\\glut-3.7.6-bin\\glut32.lib:
+             Searching G:\code\\FBOLIB-vc12-x86\lib\FBOLIB.lib:
+             Searching G:\code\CvDraw-x86-vs12\lib\CV_DRAW.lib:
+             Searching G:\code\ReconsOptimization-x86-vs12\lib\recons_optimization.lib:
+             Searching G:\code\AssimpOpenGL-x86-vs12\lib\AssimpOpenGL.lib:
+             Searching G:\code\assimp-3.1.1-vs12-x86\lib\assimp.lib:
+             Searching G:\code\ReconsVoxel-x86-vs12\lib\recons_voxel.lib:
+             Searching G:\code\\GHOSTLIB-x86-vs12\lib\GHOSTLIB.lib:
+             Searching G:\code\\CvSkeleton-x86-vs12\lib\CV_SKELETON.lib:
+             Searching G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86\pthreadVCE2.lib:
+             Searching G:\code\\zlib-vs12-x86\lib\zlibstatic.lib:
+             Searching G:\code\\jpeg-vs12-x86\lib\jpeg.lib:
+             Searching G:\code\\libpng-vs12-x86\lib\libpng16_static.lib:
+             Searching G:\code\\tiff-4.0.3\libtiff\\libtiff.lib:
+             Searching G:\code\\LaPack\lapack_win32.lib:
+             Searching G:\code\\LaPack\blas_win32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\OpenGL32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\GlU32.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_core2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_highgui2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_imgproc2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_calib3d2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_video2410.lib:
+             Searching G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib\opencv_features2d2410.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32s.lib:
+             Searching G:\code\\glew-1.9.0\lib\\glew32mxs.lib:
+             Searching G:\code\\tinyxml\vs2013\lib\tinyxml.lib:
+             Searching G:\code\\libcvd-2013\lib\libcvd.lib:
+             Searching G:\code\\gvars3-2013\lib\gvars3.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\kernel32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\user32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\gdi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\winspool.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\comdlg32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\advapi32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\shell32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\ole32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\oleaut32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\uuid.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbc32.lib:
+             Searching C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib\odbccp32.lib:
+             Searching C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\lib\libcpmt.lib:
+         
+         Finished searching libraries
+     1>libcvd.lib(zutil.obj) : warning LNK4049: locally defined symbol _free imported
+     1>libcvd.lib(zutil.obj) : warning LNK4049: locally defined symbol _malloc imported
+     1>gvars3.lib(gvars3.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(gvars3.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(serialize.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(serialize.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(inst.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(inst.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(GUI.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(GUI.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(GStringUtil.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(GStringUtil.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(gvars2.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(gvars2.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(GUI_impl_noreadline.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(GUI_impl_noreadline.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>gvars3.lib(GUI_non_readline.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'gvars3.lib(GUI_non_readline.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc120.pdb'; linking object as if no debug info
+     1>glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'G:\Visual Studio 2013\PTAMM\Release\vc100.pdb'; linking object as if no debug info
+         PTAMM.vcxproj -> G:\Visual Studio 2013\PTAMM\Release\PTAMM.exe
+     1>Done Building Project "G:\Visual Studio 2013\PTAMM\PTAMM\PTAMM.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:01:10.51

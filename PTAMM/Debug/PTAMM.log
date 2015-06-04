@@ -1,0 +1,88 @@
+﻿Build started 6/4/2015 9:02:03 AM.
+     1>Project "G:\Visual Studio 2013\PTAMM\PTAMM\PTAMM.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"G:\code\\glut-3.7.6-bin\include" /I"G:\code\\FBOLIB-vc12-x86\include" /IG:\code\\GLCV\include /I"G:\code\\jpeg-vs12-x86\include" /I"G:\code\\tiff-4.0.3\libtiff" /I"G:\code\\libpng-vs12-x86\include\\" /I"G:\code\CvDraw-x86-vs12\include" /I"g:\code\ReconsOptimization-x86-vs12\include" /I"G:\code\assimp-3.1.1-vs12-x86\include" /I"g:\code\AssimpOpenGL-x86-vs12\include" /I"G:\code\ReconsVoxel-x86-vs12\include" /I"G:\code\\GHOSTLIB-x86-vs12\include" /I"G:\code\\CvSkeleton-x86-vs12\include" /I"G:\code\\glew-1.12.0\include" /IG:\code\\LaPack\blas /IG:\code\\LaPack\lapack /I"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Include" /I"G:\code\\pthreads-2-9-1\Pre-built.2\include" /I"G:\code\opencv2.4\opencv\build-self\install\include" /IG:\code\\tinyxml\include /I"G:\code\\libcvd-2013" /IG:\code\\TooN\ /IG:\code\\TooN /I"G:\code\\gvars3-2013" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _CRT_SECURE_NO_WARNINGS /D GLEW_STATIC /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt -D_SCL_SECURE_NO_WARNINGS ARDriver.cc
+         ARDriver.cc
+     1>c:\program files (x86)\microsoft sdks\windows\v7.0a\include\sal_supp.h(57): warning C4005: '__useHeader' : macro redefinition
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\sal.h(2886) : see previous definition of '__useHeader'
+     1>c:\program files (x86)\microsoft sdks\windows\v7.0a\include\specstrings_supp.h(77): warning C4005: '__on_failure' : macro redefinition
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\sal.h(2896) : see previous definition of '__on_failure'
+     1>g:\code\toon\toon\so3.h(54): warning C4396: 'TooN::operator >>' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
+                 g:\code\toon\toon\se3.h(153) : see reference to class template instantiation 'TooN::SO3<Precision>' being compiled
+                 with
+                 [
+                     Precision=double
+                 ]
+                 g:\visual studio 2013\ptamm\ptamm\ardriver.h(70) : see reference to class template instantiation 'TooN::SE3<double>' being compiled
+     1>g:\code\toon\toon\so3.h(55): warning C4396: 'TooN::operator >>' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\math.h(1305): warning C4005: 'M_SQRT1_2' : macro redefinition
+                 g:\code\toon\toon\helpers.h(40) : see previous definition of 'M_SQRT1_2'
+     1>g:\code\reconsvoxel-x86-vs12\include\recons_voxel.h(46): warning C4244: 'initializing' : conversion from 'int' to 'const float', possible loss of data
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(24): warning C4005: 'glGenFramebuffers' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4530) : see previous definition of 'glGenFramebuffers'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(25): warning C4005: 'glDeleteFramebuffers' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4523) : see previous definition of 'glDeleteFramebuffers'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(26): warning C4005: 'glBindFramebuffer' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4519) : see previous definition of 'glBindFramebuffer'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(27): warning C4005: 'glCheckFramebufferStatus' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4522) : see previous definition of 'glCheckFramebufferStatus'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(28): warning C4005: 'glGetFramebufferAttachmentParameteriv' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4533) : see previous definition of 'glGetFramebufferAttachmentParameteriv'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(29): warning C4005: 'glGenerateMipmap' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4532) : see previous definition of 'glGenerateMipmap'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(30): warning C4005: 'glFramebufferTexture2D' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4527) : see previous definition of 'glFramebufferTexture2D'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(31): warning C4005: 'glFramebufferRenderbuffer' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4525) : see previous definition of 'glFramebufferRenderbuffer'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(33): warning C4005: 'glGenRenderbuffers' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4531) : see previous definition of 'glGenRenderbuffers'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(34): warning C4005: 'glDeleteRenderbuffers' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4524) : see previous definition of 'glDeleteRenderbuffers'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(35): warning C4005: 'glBindRenderbuffer' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4520) : see previous definition of 'glBindRenderbuffer'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(36): warning C4005: 'glRenderbufferStorage' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4537) : see previous definition of 'glRenderbufferStorage'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(37): warning C4005: 'glGetRenderbufferParameteriv' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4534) : see previous definition of 'glGetRenderbufferParameteriv'
+     1>g:\code\fbolib-vc12-x86\include\fbolib.h(38): warning C4005: 'glIsRenderbuffer' : macro redefinition
+                 g:\code\glew-1.12.0\include\gl\glew.h(4536) : see previous definition of 'glIsRenderbuffer'
+     1>g:\visual studio 2013\ptamm\ptamm\ardriver.cc(357): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\Visual Studio 2013\PTAMM\Debug\PTAMM.exe" /INCREMENTAL /NOLOGO /LIBPATH:"G:\code\\glut-3.7.6-bin\\" /LIBPATH:"G:\code\\FBOLIB-vc12-x86\lib" /LIBPATH:G:\code\\GLCV\lib /LIBPATH:"G:\code\\jpeg-vs12-x86\lib" /LIBPATH:"G:\code\\tiff-4.0.3\libtiff\\" /LIBPATH:"G:\code\\libpng-vs12-x86\lib\\" /LIBPATH:"G:\code\CvDraw-x86-vs12\lib" /LIBPATH:"g:\code\ReconsOptimization-x86-vs12\lib" /LIBPATH:"G:\code\assimp-3.1.1-vs12-x86\lib" /LIBPATH:"G:\code\AssimpOpenGL-x86-vs12\lib" /LIBPATH:"G:\code\ReconsVoxel-x86-vs12\lib" /LIBPATH:"G:\code\\GHOSTLIB-x86-vs12\lib" /LIBPATH:"G:\code\\CvSkeleton-x86-vs12\lib" /LIBPATH:"G:\code\\glew-1.12.0\lib\\" /LIBPATH:G:\code\\LaPack /LIBPATH:"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib" /LIBPATH:"\pthreads-2-9-1\pthreads.2\\" /LIBPATH:"G:\code\\pthreads-2-9-1\Pre-built.2\lib\x86" /LIBPATH:"G:\code\opencv2.4\opencv\build-self\install\x86\vc12\lib" /LIBPATH:G:\code\\tinyxml\vs2013\lib /LIBPATH:"G:\code\\libcvd-2013\lib" /LIBPATH:"G:\code\\zlib-vs12-x86\lib" /LIBPATH:"G:\code\\gvars3-2013\lib" glut32.lib FBOLIBd.lib OpenGL_OpenCVd.lib jpegd.lib libtiff.lib libpng16_staticd.lib CV_DRAWd.lib recons_optimizationd.lib AssimpOpenGLd.lib assimpd.lib recons_voxeld.lib GHOSTLIBd.lib CV_SKELETONd.lib glew32sd.lib glew32mxsd.lib lapack_win32.lib blas_win32.lib OpenGL32.lib GlU32.lib pthreadVCE2.lib opencv_core2410d.lib opencv_highgui2410d.lib opencv_imgproc2410d.lib opencv_calib3d2410d.lib opencv_video2410d.lib opencv_features2d2410d.lib tinyxmld.lib libcvdd.lib zlibstaticd.lib gvars3d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:msvcrtd.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"G:\Visual Studio 2013\PTAMM\Debug\PTAMM.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\Visual Studio 2013\PTAMM\Debug\PTAMM.lib" /MACHINE:X86 Debug\ARDriver.obj
+         Debug\ARReenactmentGame.obj
+         Debug\ATANCamera.obj
+         Debug\Bundle.obj
+         Debug\EyeGame.obj
+         Debug\Games.obj
+         Debug\GhostGame.obj
+         Debug\GLWindow2.obj
+         Debug\GLWindowMenu.obj
+         Debug\HomographyInit.obj
+         Debug\KeyFrame.obj
+         Debug\main.obj
+         Debug\Map.obj
+         Debug\MapLockManager.obj
+         Debug\MapMaker.obj
+         Debug\MapPoint.obj
+         Debug\MapSerializer.obj
+         Debug\MapViewer.obj
+         Debug\MD5.obj
+         Debug\MD5Wrapper.obj
+         Debug\MiniPatch.obj
+         Debug\PatchFinder.obj
+         Debug\PTAM2Kinect.obj
+         Debug\Relocaliser.obj
+         Debug\ShiTomasi.obj
+         Debug\ShooterGame.obj
+         Debug\ShooterGameTarget.obj
+         Debug\SmallBlurryImage.obj
+         Debug\System.obj
+         Debug\Tracker.obj
+         Debug\Utils.obj
+         Debug\VideoSource_GHOST.obj
+         PTAMM.vcxproj -> G:\Visual Studio 2013\PTAMM\Debug\PTAMM.exe
+     1>Done Building Project "G:\Visual Studio 2013\PTAMM\PTAMM\PTAMM.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.51

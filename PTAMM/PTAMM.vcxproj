@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{042941FC-C45C-4FF8-9FB5-7F27074C1E7D}</ProjectGuid>
+    <RootNamespace>PTAMM</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\gvars_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\TooN.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CVD_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tinyxml_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenCV_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\pthreads.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenGL.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\LAPack_BLAS.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLEW_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GHOSTLIB_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsVoxel_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsOptimization_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CvDraw_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\png_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tiff_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\jpeg_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLCV_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\FBOLIB_debug.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLUT.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\gvars.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\TooN.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CVD.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tinyxml.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLEW.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenCV.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenGL.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\LAPack_BLAS.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tiff.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\png.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\jpeg.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\zlib.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\pthreads.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GHOSTLIB.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsVoxel.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsOptimization.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CvDraw.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\FBOLIB.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLUT.props" />
+    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLCV.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>msvcrtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/verbose:lib %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="ARCaptureGame.h" />
+    <ClInclude Include="ARDriver.h" />
+    <ClInclude Include="ARReenactmentGame.h" />
+    <ClInclude Include="ATANCamera.h" />
+    <ClInclude Include="block.h" />
+    <ClInclude Include="Bundle.h" />
+    <ClInclude Include="EyeGame.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Games.h" />
+    <ClInclude Include="ghostsettings.h" />
+    <ClInclude Include="GLWindow2.h" />
+    <ClInclude Include="GLWindowMenu.h" />
+    <ClInclude Include="HomographyInit.h" />
+    <ClInclude Include="KeyFrame.h" />
+    <ClInclude Include="LevelHelpers.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLockManager.h" />
+    <ClInclude Include="MapMaker.h" />
+    <ClInclude Include="MapPoint.h" />
+    <ClInclude Include="MapSerializer.h" />
+    <ClInclude Include="MapViewer.h" />
+    <ClInclude Include="MD5.h" />
+    <ClInclude Include="MD5Wrapper.h" />
+    <ClInclude Include="MEstimator.h" />
+    <ClInclude Include="MiniPatch.h" />
+    <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="PatchFinder.h" />
+    <ClInclude Include="PTAM2Kinect.h" />
+    <ClInclude Include="Relocaliser.h" />
+    <ClInclude Include="ShiTomasi.h" />
+    <ClInclude Include="ShooterGame.h" />
+    <ClInclude Include="ShooterGameTarget.h" />
+    <ClInclude Include="SmallBlurryImage.h" />
+    <ClInclude Include="SmallMatrixOpts.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="Tracker.h" />
+    <ClInclude Include="TrackerData.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="VideoSource.h" />
+    <ClInclude Include="VideoSource_.h" />
+    <ClInclude Include="VideoSource_old.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ARCaptureGame.cpp" />
+    <ClCompile Include="ARDriver.cc" />
+    <ClCompile Include="ARReenactmentGame.cpp" />
+    <ClCompile Include="ATANCamera.cc" />
+    <ClCompile Include="Bundle.cc" />
+    <ClCompile Include="EyeGame.cc" />
+    <ClCompile Include="Games.cc" />
+    <ClCompile Include="GhostGame.cpp" />
+    <ClCompile Include="GLWindow2.cc" />
+    <ClCompile Include="GLWindowMenu.cc" />
+    <ClCompile Include="HomographyInit.cc" />
+    <ClCompile Include="KeyFrame.cc" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="Map.cc" />
+    <ClCompile Include="MapLockManager.cc" />
+    <ClCompile Include="MapMaker.cc" />
+    <ClCompile Include="MapPoint.cc" />
+    <ClCompile Include="MapSerializer.cc" />
+    <ClCompile Include="MapViewer.cc" />
+    <ClCompile Include="MD5.cc" />
+    <ClCompile Include="MD5Wrapper.cc" />
+    <ClCompile Include="MiniPatch.cc" />
+    <ClCompile Include="PatchFinder.cc" />
+    <ClCompile Include="PTAM2Kinect.cpp" />
+    <ClCompile Include="Relocaliser.cc" />
+    <ClCompile Include="ShiTomasi.cc" />
+    <ClCompile Include="ShooterGame.cc" />
+    <ClCompile Include="ShooterGameTarget.cc" />
+    <ClCompile Include="SmallBlurryImage.cc" />
+    <ClCompile Include="System.cc" />
+    <ClCompile Include="Tracker.cc" />
+    <ClCompile Include="Utils.cc" />
+    <ClCompile Include="VideoSource_GHOST.cc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

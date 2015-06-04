@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PTAMM", "PTAMM\PTAMM.vcxproj", "{042941FC-C45C-4FF8-9FB5-7F27074C1E7D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CameraCalibrator", "CameraCalibrator\CameraCalibrator.vcxproj", "{FFDD348E-00B7-4EB4-ACDA-92E8FDF438D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{042941FC-C45C-4FF8-9FB5-7F27074C1E7D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{042941FC-C45C-4FF8-9FB5-7F27074C1E7D}.Debug|Win32.Build.0 = Debug|Win32
+		{042941FC-C45C-4FF8-9FB5-7F27074C1E7D}.Release|Win32.ActiveCfg = Release|Win32
+		{042941FC-C45C-4FF8-9FB5-7F27074C1E7D}.Release|Win32.Build.0 = Release|Win32
+		{FFDD348E-00B7-4EB4-ACDA-92E8FDF438D9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FFDD348E-00B7-4EB4-ACDA-92E8FDF438D9}.Debug|Win32.Build.0 = Debug|Win32
+		{FFDD348E-00B7-4EB4-ACDA-92E8FDF438D9}.Release|Win32.ActiveCfg = Release|Win32
+		{FFDD348E-00B7-4EB4-ACDA-92E8FDF438D9}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

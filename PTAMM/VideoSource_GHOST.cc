@@ -501,3 +501,242 @@ ImageRef VideoSource::Size()
 }
 
 #endif
+#if GHOST_INPUT == INPUT_KINECT
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <Ole2.h>
+
+#include "VideoSource.h"
+#include <Windows.h>
+#include <cvd\utility.h>
+#include <opencv2\opencv.hpp>
+
+#include "gvars3\instances.h"
+
+
+#include "KinectManager.h"
+
+using namespace CVD;
+using namespace std;
+using namespace GVars3;
+
+//videosource should also be able to load from file
+//can we control this thru gvars?
+
+KinectManager * kinect_manager;
+
+void GUICommandCallback(void *ptr, string sCommand, string sParams){
+	VideoSource * vs = static_cast<VideoSource*>(ptr);
+	if (sCommand == "GH_CaptureReset"){
+		vs->setFrame(1);
+	}
+}
+
+VideoSource::VideoSource()//: cam(1)
+{
+	kinect_manager = KinectManager::GetKinectManager();
+
+	if (!kinect_manager->IsOpened()){
+		kinect_manager->InitializeDefaultSensor();
+	}
+	
+	mirSize.x = KINECT_CAPTURE_SIZE_X;
+	mirSize.y = KINECT_CAPTURE_SIZE_Y;
+
+	currFrame = 1;
+	currOut = 1;
+
+	GetLocalTime(&prevtime);
+	elapsed = 0;
+
+	refreshVidDirectory();
+};
+
+VideoSource::~VideoSource()
+{
+};
+
+void VideoSource::setFrame(int f){
+	currFrame = f;
+};
+
+//copied from GhostGame.cpp
+void VideoSource::refreshVidDirectory(){
+	time_t t = time(0);
+	struct tm now;
+	localtime_s(&now, &t);
+	char buf[100];
+
+	sprintf_s(buf, "kinectdump-%d-%d-%d-%02d%02d", now.tm_year + 1900, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_sec);
+
+	dumpPath = std::string(buf);
+};
+
+void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb<CVD::byte> > &imRGB)
+{
+	if (!kinect_manager->IsOpened()){
+		kinect_manager->InitializeDefaultSensor();
+	}
+	kinect_manager->Update(Update::Color);
+
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	int temp = time.wMilliseconds - prevtime.wMilliseconds + 1000 * (time.wSecond - prevtime.wSecond);
+
+	if (temp < 0) temp = 0;
+
+	elapsed += temp;
+	prevtime = time;
+
+	while (elapsed >= (1000 / FRAMERATE))
+	{
+		++currFrame;
+		elapsed -= (1000 / FRAMERATE);
+	}
+
+	unsigned char * rgba_data = kinect_manager->GetColorRGBX();
+
+	cv::Mat rgb(KINECT_CAPTURE_SIZE_Y, KINECT_CAPTURE_SIZE_X, CV_8UC4, rgba_data);
+
+	mirSize.x = rgb.cols;
+	mirSize.y = rgb.rows;
+
+	imRGB.resize(mirSize);
+	imBW.resize(mirSize);
+
+	for (int y = 0; y<mirSize.y; y++) {
+		for (int x = 0; x<mirSize.x; x++) {
+			//int x_ = mirSize.x - x - 1;
+
+			imRGB[y][x].blue = rgb.ptr<cv::Vec4b>(y)[x](0);
+			imRGB[y][x].green = rgb.ptr<cv::Vec4b>(y)[x](1);
+			imBW[y][x] = rgb.ptr<cv::Vec4b>(y)[x](1);
+			imRGB[y][x].red = rgb.ptr<cv::Vec4b>(y)[x](2);
+
+		}
+	}
+
+}
+
+ImageRef VideoSource::Size()
+{
+	return mirSize;
+}
+
+#endif
+#if GHOST_INPUT == INPUT_FILE
+
+
+#define WIN32_LEAN_AND_MEAN
+#include "VideoSource.h"
+#include <Windows.h>
+#include <cvd\utility.h>
+#include <opencv2\opencv.hpp>
+
+#include "gvars3\instances.h"
+
+using namespace CVD;
+using namespace std;
+using namespace GVars3;
+
+std::vector<std::string> filenames;
+
+void GUICommandCallback(void *ptr, string sCommand, string sParams){
+	VideoSource * vs = static_cast<VideoSource*>(ptr);
+	if (sCommand == "GH_CaptureReset"){
+		vs->setFrame(1);
+	}
+}
+
+VideoSource::VideoSource()//: cam(1)
+{
+	std::stringstream filename_ss;
+
+	for (int i = 0; i < 500; ++i){
+		filename_ss.str("");
+		filename_ss << "G:/debug2013/calib1/rgbx" << i << ".png";
+		filenames.push_back(filename_ss.str());
+	}
+
+	mirSize.x = 512;
+	mirSize.y = 424;
+
+	currFrame = 1;
+	currOut = 1;
+
+	GetLocalTime(&prevtime);
+	elapsed = 0;
+
+	refreshVidDirectory();
+};
+
+VideoSource::~VideoSource()
+{
+};
+
+void VideoSource::setFrame(int f){
+	currFrame = f;
+};
+
+//copied from GhostGame.cpp
+void VideoSource::refreshVidDirectory(){
+	time_t t = time(0);
+	struct tm now;
+	localtime_s(&now, &t);
+	char buf[100];
+
+	sprintf_s(buf, "kinectdump-%d-%d-%d-%02d%02d", now.tm_year + 1900, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_sec);
+
+	dumpPath = std::string(buf);
+};
+
+void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb<CVD::byte> > &imRGB)
+{
+
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	int temp = time.wMilliseconds - prevtime.wMilliseconds + 1000 * (time.wSecond - prevtime.wSecond);
+
+	if (temp < 0) temp = 0;
+
+	elapsed += temp;
+	prevtime = time;
+
+	while (elapsed >= (1000 / FRAMERATE))
+	{
+		++currFrame;
+		elapsed -= (1000 / FRAMERATE);
+	}
+
+	cv::Mat rgb = cv::imread(filenames[currFrame%filenames.size()]);
+
+	mirSize.x = rgb.cols;
+	mirSize.y = rgb.rows;
+
+	imRGB.resize(mirSize);
+	imBW.resize(mirSize);
+
+	for (int y = 0; y<mirSize.y; y++) {
+		for (int x = 0; x<mirSize.x; x++) {
+			int x_ = mirSize.x - x - 1;
+
+			imRGB[y][x_].blue = rgb.ptr<cv::Vec3b>(y)[x_](0);
+			imRGB[y][x_].green = rgb.ptr<cv::Vec3b>(y)[x_](1);
+			imBW[y][x_] = rgb.ptr<cv::Vec3b>(y)[x_](1);
+			imRGB[y][x_].red = rgb.ptr<cv::Vec3b>(y)[x_](2);
+
+		}
+	}
+
+}
+
+
+ImageRef VideoSource::Size()
+{
+	return mirSize;
+}
+
+#endif

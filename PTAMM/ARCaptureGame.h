@@ -32,8 +32,12 @@ namespace PTAMM{
 		void HandleKeyPress(std::string key);
 		void Advance();
 
+
 	private:
 		static void GUICommandCallback(void *ptr, string command, string params);
+		void DoCalibrate();
 
+		ATANCamera camera;
+		bool calibrate;
 	};
 }

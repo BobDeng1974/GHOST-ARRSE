@@ -1,0 +1,13 @@
+﻿Build started 6/4/2015 7:31:30 PM.
+     1>Project "G:\Visual Studio 2013\PTAMM\KinectManager\KinectManager.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files\Microsoft SDKs\Kinect\v1.8\inc" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt KinectManager.cpp
+         KinectManager.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"G:\Visual Studio 2013\PTAMM\Release\KinectManager.lib" /NOLOGO /LTCG Release\KinectManager.obj
+         KinectManager.vcxproj -> G:\Visual Studio 2013\PTAMM\Release\KinectManager.lib
+     1>Done Building Project "G:\Visual Studio 2013\PTAMM\KinectManager\KinectManager.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.65

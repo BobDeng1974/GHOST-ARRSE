@@ -35,6 +35,9 @@ int main()
 #if GHOST_INPUT == INPUT_WEBCAM
   GUI.LoadFile("settings.cfg");
 #endif
+#if GHOST_INPUT == INPUT_FILE
+  GUI.LoadFile("settings_file.cfg");
+#endif
 
   GUI.StartParserThread(); // Start parsing of the console input
   atexit(GUI.StopParserThread); 

@@ -70,6 +70,8 @@ namespace PTAMM{
 		FBO fbo1;
 
 		cv::Mat opengl_projection, camera_matrix_current;
+		cv::Mat PTAMM_to_kinect;
+
 		ATANCamera temp_cam;
 
 		cv::Vec3b bg_color;

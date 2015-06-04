@@ -15,7 +15,6 @@
 
 namespace PTAMM{
 
-	bool menusAdded = false;
 
 	ARReenactmentGame::ARReenactmentGame()
 		:Game("AR Reenactment"),
@@ -33,19 +32,21 @@ namespace PTAMM{
 	{
 		//hook into the GVARS window, add extra menu options:
 
-		if (!menusAdded){
+		GVars3::GUI.RegisterCommand("ARR_NextSection", GUICommandCallback, this);
+		GVars3::GUI.RegisterCommand("ARR_PrevSection", GUICommandCallback, this);
+		GVars3::GUI.RegisterCommand("ARR_StartFrame", GUICommandCallback, this);
+		GVars3::GUI.RegisterCommand("ARR_Pause", GUICommandCallback, this);
+
+		static bool arr_menus_added = false;
+		if (!arr_menus_added){
 			//gui
-			GVars3::GUI.RegisterCommand("ARR_NextSection", GUICommandCallback, this);
-			GVars3::GUI.RegisterCommand("ARR_PrevSection", GUICommandCallback, this);
-			GVars3::GUI.RegisterCommand("ARR_StartFrame", GUICommandCallback, this);
-			GVars3::GUI.RegisterCommand("ARR_Pause", GUICommandCallback, this);
 
 			GVars3::GUI.ParseLine("GLWindow.AddMenu ARRMenu AR_Reenactment");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Next Section\" ARR_NextSection Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Prev Section\" ARR_PrevSection Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Start Frame\" ARR_StartFrame Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuToggle Root \"Pause\" ARR_Pause Root");
-			menusAdded = true;
+			arr_menus_added = true;
 		}
 
 
@@ -159,16 +160,21 @@ namespace PTAMM{
 			}
 		}
 		camera_matrix_current = cv::Mat::eye(4, 4, CV_32F);
+
+		fs.open("PTAMM_to_kinect.yml", cv::FileStorage::READ);
+		fs["PTAMM_to_kinect"] >> PTAMM_to_kinect;
+		fs.release();
+
+		if (PTAMM_to_kinect.empty()){
+			PTAMM_to_kinect = cv::Mat::eye(4, 4, CV_32F);
+		}
 	}
 
 	ARReenactmentGame::~ARReenactmentGame(){
-		if (menusAdded){
-			GVars3::GUI.ParseLine("ARRMenu.Destroy");
-			GVars3::GUI.UnRegisterCommand("GH_NextSection");
-			GVars3::GUI.UnRegisterCommand("GH_PrevSection");
-			GVars3::GUI.UnRegisterCommand("GH_StartFrame");
-			menusAdded = false;
-		}
+		GVars3::GUI.UnRegisterCommand("ARR_NextSection");
+		GVars3::GUI.UnRegisterCommand("ARR_PrevSection");
+		GVars3::GUI.UnRegisterCommand("ARR_StartFrame");
+		GVars3::GUI.UnRegisterCommand("ARR_Pause");
 	}
 
 	void ARReenactmentGame::Reset(){}
@@ -179,6 +185,7 @@ namespace PTAMM{
 	}
 
 	void ARReenactmentGame::Draw3D(const GLWindow2 &gl_window, Map &map, SE3<> camera_from_world){
+
 
 		int ptamm_fbo;
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &ptamm_fbo);
@@ -194,15 +201,15 @@ namespace PTAMM{
 			genFBO(fbo1);
 		}
 
-		//camera_matrix_current.ptr<float>(0)[0] = temp_cam.GetParams()[0] * viewport_width;
-		//camera_matrix_current.ptr<float>(1)[1] = temp_cam.GetParams()[1] * viewport_height;
-		//camera_matrix_current.ptr<float>(0)[2] = temp_cam.GetParams()[2] * viewport_width - 0.5;
-		//camera_matrix_current.ptr<float>(1)[2] = temp_cam.GetParams()[3] * viewport_height - 0.5;
-		camera_matrix_current.ptr<float>(0)[0] = -3.6402221679687500e+002;
-		camera_matrix_current.ptr<float>(1)[1] = 3.6513830566406250e+002;
-		camera_matrix_current.ptr<float>(0)[1] = 1.1480305343866348e-002;
-		camera_matrix_current.ptr<float>(0)[2] = 2.5479405212402344e+002;
-		camera_matrix_current.ptr<float>(1)[2] = 2.0673567199707031e+002;
+		camera_matrix_current.ptr<float>(0)[0] = temp_cam.GetParams()[0] * viewport_width;
+		camera_matrix_current.ptr<float>(1)[1] = temp_cam.GetParams()[1] * viewport_height;
+		camera_matrix_current.ptr<float>(0)[2] = temp_cam.GetParams()[2] * viewport_width - 0.5;
+		camera_matrix_current.ptr<float>(1)[2] = temp_cam.GetParams()[3] * viewport_height - 0.5;
+		//camera_matrix_current.ptr<float>(0)[0] = -3.6402221679687500e+002;
+		//camera_matrix_current.ptr<float>(1)[1] = 3.6513830566406250e+002;
+		//camera_matrix_current.ptr<float>(0)[1] = 1.1480305343866348e-002;
+		//camera_matrix_current.ptr<float>(0)[2] = 2.5479405212402344e+002;
+		//camera_matrix_current.ptr<float>(1)[2] = 2.0673567199707031e+002;
 
 		//convert camera_from_world into a cv::Mat
 		cv::Mat camera_from_world_mat = cv::Mat::eye(4,4,CV_32F);
@@ -222,12 +229,19 @@ namespace PTAMM{
 			camera_from_world_mat.ptr<float>(0)[3] = translation_vector[0];
 			camera_from_world_mat.ptr<float>(1)[3] = translation_vector[1];
 			camera_from_world_mat.ptr<float>(2)[3] = translation_vector[2];
-		} 
+		}
+
+		//cv::Mat camera_from_world_mat_2;
+		//cv::FileStorage fs;
+		//fs.open("PTAMM_camera_from_world.yml", cv::FileStorage::READ);
+		//fs["PTAMM_camera_from_world"] >> camera_from_world_mat_2;
+		//fs.release();
 
 		//cv::Mat y_180 = cv::Mat::eye(4, 4, CV_32F);
 		//cv::Rodrigues(cv::Vec3f(0, CV_PI, CV_PI), y_180(cv::Range(0, 3), cv::Range(0, 3)));
 		//cv::Mat current_transform = model_center * camera_from_world_mat * model_center_inv;
-		cv::Mat current_transform = camera_from_world_mat ; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+
+		cv::Mat current_transform = camera_from_world_mat * PTAMM_to_kinect.inv();// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
 
@@ -240,7 +254,7 @@ namespace PTAMM{
 			//glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)opengl_projection.data);
 			//opengl_projection = opengl_projection.t();
 			opengl_projection = build_opengl_projection_for_intrinsics(viewport, 
-				-camera_matrix_current.ptr<float>(0)[0],
+				camera_matrix_current.ptr<float>(0)[0],
 				camera_matrix_current.ptr<float>(1)[1],
 				camera_matrix_current.ptr<float>(0)[1],
 				camera_matrix_current.ptr<float>(0)[2],

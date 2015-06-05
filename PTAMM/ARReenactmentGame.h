@@ -80,5 +80,7 @@ namespace PTAMM{
 		SYSTEMTIME prev_time;
 		unsigned int elapsed;
 		bool pause;
+
+		cv::Mat camera_from_world_capture; //this should be different per frame, based on the capturing stage; for now, we'll set it to the first frame
 	};
 }

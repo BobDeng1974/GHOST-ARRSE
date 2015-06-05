@@ -186,7 +186,6 @@ namespace PTAMM{
 
 	void ARReenactmentGame::Draw3D(const GLWindow2 &gl_window, Map &map, SE3<> camera_from_world){
 
-
 		int ptamm_fbo;
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &ptamm_fbo);
 
@@ -231,6 +230,11 @@ namespace PTAMM{
 			camera_from_world_mat.ptr<float>(2)[3] = translation_vector[2];
 		}
 
+		if (camera_from_world_capture.empty()){
+			camera_from_world_capture = camera_from_world_mat.clone();
+		}
+
+
 		//cv::Mat camera_from_world_mat_2;
 		//cv::FileStorage fs;
 		//fs.open("PTAMM_camera_from_world.yml", cv::FileStorage::READ);
@@ -241,7 +245,7 @@ namespace PTAMM{
 		//cv::Rodrigues(cv::Vec3f(0, CV_PI, CV_PI), y_180(cv::Range(0, 3), cv::Range(0, 3)));
 		//cv::Mat current_transform = model_center * camera_from_world_mat * model_center_inv;
 
-		cv::Mat current_transform = camera_from_world_mat * PTAMM_to_kinect.inv();// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+		cv::Mat current_transform = camera_from_world_mat * camera_from_world_capture.inv() * PTAMM_to_kinect.inv();// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
 

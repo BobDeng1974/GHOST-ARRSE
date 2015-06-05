@@ -27,15 +27,15 @@ namespace PTAMM{
 		bg_color(0, 0, 0),
 		temp_cam("Camera"),
 		anim_frame( 0),
-		elapsed(0),
-		pause(false)
+		elapsed(0)
 	{
 		//hook into the GVARS window, add extra menu options:
 
 		GVars3::GUI.RegisterCommand("ARR_NextSection", GUICommandCallback, this);
 		GVars3::GUI.RegisterCommand("ARR_PrevSection", GUICommandCallback, this);
 		GVars3::GUI.RegisterCommand("ARR_StartFrame", GUICommandCallback, this);
-		GVars3::GUI.RegisterCommand("ARR_Pause", GUICommandCallback, this);
+
+		GVars3::GV2.Register(pause, "ARR_Pause", 0, GVars3::SILENT);
 
 		static bool arr_menus_added = false;
 		if (!arr_menus_added){
@@ -54,7 +54,7 @@ namespace PTAMM{
 
 		static GVars3::gvar3<std::string> video_directory("ARReenactmentMotion", "", GVars3::SILENT);
 		static GVars3::gvar3<std::string> voxel_path("ARReenactmentVoxels", "", GVars3::SILENT);
-		int startframe = 0, numframes = 3; //TODO
+		int startframe = 0, numframes = 100; //TODO
 		//TODO: extra data file specifically for the AR Reenactment (e.g. sections)
 
 		//load in the motion
@@ -200,7 +200,7 @@ namespace PTAMM{
 			genFBO(fbo1);
 		}
 
-		camera_matrix_current.ptr<float>(0)[0] = temp_cam.GetParams()[0] * viewport_width;
+		camera_matrix_current.ptr<float>(0)[0] = -temp_cam.GetParams()[0] * viewport_width;
 		camera_matrix_current.ptr<float>(1)[1] = temp_cam.GetParams()[1] * viewport_height;
 		camera_matrix_current.ptr<float>(0)[2] = temp_cam.GetParams()[2] * viewport_width - 0.5;
 		camera_matrix_current.ptr<float>(1)[2] = temp_cam.GetParams()[3] * viewport_height - 0.5;
@@ -211,7 +211,7 @@ namespace PTAMM{
 		//camera_matrix_current.ptr<float>(1)[2] = 2.0673567199707031e+002;
 
 		//convert camera_from_world into a cv::Mat
-		cv::Mat camera_from_world_mat = cv::Mat::eye(4,4,CV_32F);
+		cv::Mat camera_from_world_mat = cv::Mat::eye(4, 4, CV_32F);
 		{
 			Matrix<3, 3, double> rotation_matrix = camera_from_world.get_rotation().get_matrix();
 			Vector<3, double> translation_vector = camera_from_world.get_translation();
@@ -225,9 +225,9 @@ namespace PTAMM{
 			camera_from_world_mat.ptr<float>(0)[2] = rotation_matrix(0, 2);
 			camera_from_world_mat.ptr<float>(1)[2] = rotation_matrix(1, 2);
 			camera_from_world_mat.ptr<float>(2)[2] = rotation_matrix(2, 2);
-			camera_from_world_mat.ptr<float>(0)[3] = translation_vector[0];
-			camera_from_world_mat.ptr<float>(1)[3] = translation_vector[1];
-			camera_from_world_mat.ptr<float>(2)[3] = translation_vector[2];
+			camera_from_world_mat.ptr<float>(0)[3] = -translation_vector[0];
+			camera_from_world_mat.ptr<float>(1)[3] = -translation_vector[1];
+			camera_from_world_mat.ptr<float>(2)[3] = -translation_vector[2];
 		}
 
 		if (camera_from_world_capture.empty()){
@@ -245,7 +245,19 @@ namespace PTAMM{
 		//cv::Rodrigues(cv::Vec3f(0, CV_PI, CV_PI), y_180(cv::Range(0, 3), cv::Range(0, 3)));
 		//cv::Mat current_transform = model_center * camera_from_world_mat * model_center_inv;
 
-		cv::Mat current_transform = camera_from_world_mat * camera_from_world_capture.inv() * PTAMM_to_kinect.inv();// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+		cv::Mat flip_z = cv::Mat::eye(4, 4, CV_32F);
+		flip_z.ptr<float>(0)[0] = 1;
+		flip_z.ptr<float>(1)[1] = -1;
+		flip_z.ptr<float>(2)[2] = -1;
+		//opengl_projection *= flip_z;
+
+		//cv::Rodrigues(cv::Vec3f(0, CV_PI / 2, 0), flip_z(cv::Range(0, 3), cv::Range(0, 3)));
+
+		cv::Mat flip_2 = cv::Mat::eye(4, 4, CV_32F);
+		flip_2.ptr<float>(1)[1] = -1;
+		flip_z.ptr<float>(2)[2] = -1;
+
+		cv::Mat current_transform = flip_z * camera_from_world_mat * camera_from_world_capture.inv() /* flip_z.inv()*/ * PTAMM_to_kinect.inv() * flip_2;// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
 
@@ -257,20 +269,16 @@ namespace PTAMM{
 			//opengl_projection.create(4, 4, CV_32F);
 			//glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)opengl_projection.data);
 			//opengl_projection = opengl_projection.t();
-			opengl_projection = build_opengl_projection_for_intrinsics(viewport, 
+			opengl_projection = build_opengl_projection_for_intrinsics(viewport,
 				camera_matrix_current.ptr<float>(0)[0],
-				camera_matrix_current.ptr<float>(1)[1],
+				-camera_matrix_current.ptr<float>(1)[1],
 				camera_matrix_current.ptr<float>(0)[1],
 				camera_matrix_current.ptr<float>(0)[2],
-				camera_matrix_current.ptr<float>(1)[2]+10,
+				camera_matrix_current.ptr<float>(1)[2] + 38,
 				viewport_width,
 				viewport_height,
 				0.001, 10);
-			
-			//cv::Mat flip_z = cv::Mat::eye(4, 4, CV_32F);
-			//flip_z.ptr<float>(1)[1] = -1;
-			//flip_z.ptr<float>(0)[0] = -1;
-			//opengl_projection *= flip_z;
+
 
 			//opengl_projection.create(4, 4, CV_32F);
 			//opengl_projection.ptr<float>(0)[0] = 2.61212;
@@ -289,7 +297,7 @@ namespace PTAMM{
 			//opengl_projection.ptr<float>(3)[1] = 0;
 			//opengl_projection.ptr<float>(3)[2] = 1;
 			//opengl_projection.ptr<float>(3)[3] = 0;
-			
+
 
 		}
 
@@ -297,6 +305,7 @@ namespace PTAMM{
 		glLoadIdentity();
 		glMultMatrixf(opengl_projection_t.ptr<float>());
 
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo1.fboId);
 		glClearColor(bg_color(0)/256.f, bg_color(1)/256.f, bg_color(2)/256.f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -397,9 +406,10 @@ namespace PTAMM{
 			
 			
 				cv::Mat source_transform = current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
+				cv::Mat source_transform_texsearch = flip_z.inv() * current_transform * flip_2.inv() * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
 			
 				//std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform, frame_snhmaps, frame_datas, bodypart_frame_cluster[i]);
-				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform, frame_snhmaps, frame_datas, std::vector<std::vector<int>>());
+				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform_texsearch, frame_snhmaps, frame_datas, std::vector<std::vector<int>>());
 			
 				cv::Mat neutral_pts = (camera_matrix_current * source_transform).inv() * bodypart_pts;
 			
@@ -501,7 +511,7 @@ namespace PTAMM{
 		{
 
 			elapsed -= 1000 / FRAMERATE;
-			if (!pause)
+			if (!*pause)
 			{
 				++anim_frame;
 			}
@@ -544,9 +554,6 @@ namespace PTAMM{
 		}
 		else if (command == "ARR_StartFrame"){
 			g->section_start_frame();
-		}
-		else if (command == "ARR_Pause"){
-
 		}
 	};
 }

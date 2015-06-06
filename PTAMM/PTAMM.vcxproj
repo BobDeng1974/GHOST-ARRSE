@@ -33,50 +33,50 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\gvars_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\TooN.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CVD_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tinyxml_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenCV_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\pthreads.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenGL.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\LAPack_BLAS.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLEW_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GHOSTLIB_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsVoxel_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsOptimization_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CvDraw_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\png_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tiff_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\jpeg_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLCV_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\FBOLIB_debug.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLUT.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\Kinect18.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\gvars_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\TooN.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\CVD_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\tinyxml_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\OpenCV_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\pthreads.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\OpenGL.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\LAPack_BLAS.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GLEW_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GHOSTLIB_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\ReconsVoxel_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\ReconsOptimization_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\CvDraw_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\png_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\tiff_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\jpeg_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GLCV_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\FBOLIB_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GLUT.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\gvars.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\TooN.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CVD.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tinyxml.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLEW.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenCV.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\OpenGL.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\LAPack_BLAS.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\tiff.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\png.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\jpeg.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\zlib.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\pthreads.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GHOSTLIB.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsVoxel.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\ReconsOptimization.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\CvDraw.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\FBOLIB.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLUT.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\GLCV.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2013\Projects\PROPERTY SHEETS\Kinect18.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\gvars.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\TooN.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\CVD.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\tinyxml.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GLEW.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\OpenCV.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\OpenGL.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\LAPack_BLAS.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\tiff.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\png.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\jpeg.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\zlib.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\pthreads.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GHOSTLIB.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\ReconsVoxel.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\ReconsOptimization.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\CvDraw.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\FBOLIB.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GLUT.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\GLCV.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

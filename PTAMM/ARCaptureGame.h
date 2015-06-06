@@ -39,5 +39,6 @@ namespace PTAMM{
 
 		ATANCamera camera;
 		bool calibrate;
+		cv::Mat PTAMM_to_kinect;
 	};
 }

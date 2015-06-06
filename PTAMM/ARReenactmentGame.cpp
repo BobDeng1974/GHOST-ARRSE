@@ -29,11 +29,27 @@ namespace PTAMM{
 		anim_frame( 0),
 		elapsed(0)
 	{
+	}
+
+	ARReenactmentGame::~ARReenactmentGame(){
+		GVars3::GUI.UnRegisterCommand("ARR_NextSection");
+		GVars3::GUI.UnRegisterCommand("ARR_PrevSection");
+		GVars3::GUI.UnRegisterCommand("ARR_StartFrame");
+		GVars3::GUI.UnRegisterCommand("ARR_Pause");
+	}
+
+	void ARReenactmentGame::Reset(){
+
+	}
+
+	void ARReenactmentGame::Init(){
+
 		//hook into the GVARS window, add extra menu options:
 
 		GVars3::GUI.RegisterCommand("ARR_NextSection", GUICommandCallback, this);
 		GVars3::GUI.RegisterCommand("ARR_PrevSection", GUICommandCallback, this);
 		GVars3::GUI.RegisterCommand("ARR_StartFrame", GUICommandCallback, this);
+		GVars3::GUI.RegisterCommand("ARR_ResetCFW", GUICommandCallback, this);
 
 		GVars3::GV2.Register(pause, "ARR_Pause", 0, GVars3::SILENT);
 
@@ -46,6 +62,7 @@ namespace PTAMM{
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Prev Section\" ARR_PrevSection Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Start Frame\" ARR_StartFrame Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuToggle Root \"Pause\" ARR_Pause Root");
+			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Reset CFW\" ARR_ResetCFW Root");
 			arr_menus_added = true;
 		}
 
@@ -72,19 +89,29 @@ namespace PTAMM{
 		}
 		fs.release();
 
+		std::string extension = ".xml.gz";
+
 		//load frames
 		std::vector<std::string> filenames;
 		for (int i = startframe; i < startframe + numframes; ++i){
 			filename_ss.str("");
-			filename_ss << *video_directory << "/" << i << ".xml.gz";
+			filename_ss << *video_directory << "/" << i << extension;
 			filenames.push_back(filename_ss.str());
 		}
-		load_processed_frames(filenames, bodypart_definitions.size(), frame_datas, true);
+		load_processed_frames(filenames, extension, bodypart_definitions.size(), frame_datas, true);
 
 		//build snhmaps
 		for (int i = 0; i < frame_datas.size(); ++i){
 			frame_snhmaps.push_back(SkeletonNodeHardMap());
 			cv_draw_and_build_skeleton(&frame_datas[i].mRoot, cv::Mat::eye(4, 4, CV_32F), frame_datas[i].mCameraMatrix, frame_datas[i].mCameraPose, &frame_snhmaps[i]);
+		}
+
+		if (section_frames.empty()){
+			section_frames.push_back(std::vector<int>());
+			section_frames[0].resize(frame_datas.size());
+			for (int i = 0; i < frame_datas.size(); ++i){
+				section_frames[0][i] = i;
+			}
 		}
 
 		//calculate model center in frame 0
@@ -161,26 +188,21 @@ namespace PTAMM{
 		}
 		camera_matrix_current = cv::Mat::eye(4, 4, CV_32F);
 
-		fs.open("PTAMM_to_kinect.yml", cv::FileStorage::READ);
-		fs["PTAMM_to_kinect"] >> PTAMM_to_kinect;
-		fs.release();
-
 		if (PTAMM_to_kinect.empty()){
-			PTAMM_to_kinect = cv::Mat::eye(4, 4, CV_32F);
+			fs.open("PTAMM_to_kinect.yml", cv::FileStorage::READ);
+			fs["PTAMM_to_kinect"] >> PTAMM_to_kinect;
+			fs.release();
+
+			if (PTAMM_to_kinect.empty()){
+				PTAMM_to_kinect = cv::Mat::eye(4, 4, CV_32F);
+			}
 		}
-	}
 
-	ARReenactmentGame::~ARReenactmentGame(){
-		GVars3::GUI.UnRegisterCommand("ARR_NextSection");
-		GVars3::GUI.UnRegisterCommand("ARR_PrevSection");
-		GVars3::GUI.UnRegisterCommand("ARR_StartFrame");
-		GVars3::GUI.UnRegisterCommand("ARR_Pause");
-	}
 
-	void ARReenactmentGame::Reset(){}
-
-	void ARReenactmentGame::Init(){
-		
+		bodypart_precalculated_rotation_vectors.resize(bodypart_definitions.size());
+		for (int i = 0; i < bodypart_definitions.size(); ++i){
+			bodypart_precalculated_rotation_vectors[i] = precalculate_vecs(bodypart_definitions[i], frame_snhmaps, frame_datas);
+		}
 
 	}
 
@@ -234,13 +256,6 @@ namespace PTAMM{
 			camera_from_world_capture = camera_from_world_mat.clone();
 		}
 
-
-		//cv::Mat camera_from_world_mat_2;
-		//cv::FileStorage fs;
-		//fs.open("PTAMM_camera_from_world.yml", cv::FileStorage::READ);
-		//fs["PTAMM_camera_from_world"] >> camera_from_world_mat_2;
-		//fs.release();
-
 		//cv::Mat y_180 = cv::Mat::eye(4, 4, CV_32F);
 		//cv::Rodrigues(cv::Vec3f(0, CV_PI, CV_PI), y_180(cv::Range(0, 3), cv::Range(0, 3)));
 		//cv::Mat current_transform = model_center * camera_from_world_mat * model_center_inv;
@@ -278,25 +293,6 @@ namespace PTAMM{
 				viewport_width,
 				viewport_height,
 				0.001, 10);
-
-
-			//opengl_projection.create(4, 4, CV_32F);
-			//opengl_projection.ptr<float>(0)[0] = 2.61212;
-			//opengl_projection.ptr<float>(0)[1] = 0;
-			//opengl_projection.ptr<float>(0)[2] = 0.0101503;
-			//opengl_projection.ptr<float>(0)[3] = 0;
-			//opengl_projection.ptr<float>(1)[0] = 0;
-			//opengl_projection.ptr<float>(1)[1] = -3.52166;
-			//opengl_projection.ptr<float>(1)[2] = 0.0854515;
-			//opengl_projection.ptr<float>(1)[3] = 0;
-			//opengl_projection.ptr<float>(2)[0] = 0;
-			//opengl_projection.ptr<float>(2)[1] = 0;
-			//opengl_projection.ptr<float>(2)[2] = 1.0202;
-			//opengl_projection.ptr<float>(2)[3] = -0.20202;
-			//opengl_projection.ptr<float>(3)[0] = 0;
-			//opengl_projection.ptr<float>(3)[1] = 0;
-			//opengl_projection.ptr<float>(3)[2] = 1;
-			//opengl_projection.ptr<float>(3)[3] = 0;
 
 
 		}
@@ -362,7 +358,7 @@ namespace PTAMM{
 
 			cv::Mat render_pretexture = gl_read_color(viewport[2], viewport[3]);
 
-			cv::imwrite("renpre.png", render_pretexture);
+			//cv::imwrite("renpre.png", render_pretexture);
 		
 			cv::Mat render_depth = gl_read_depth(viewport_width, viewport_height, opengl_projection);
 		
@@ -376,7 +372,7 @@ namespace PTAMM{
 
 			for (int y = 0; y < viewport_height; ++y){
 				for (int x = 0; x < viewport_width; ++x){
-					cv::Vec3b orig_color = render_pretexture.ptr<cv::Vec3b>(y)[x];
+					cv::Vec3b& orig_color = render_pretexture.ptr<cv::Vec3b>(y)[x];
 					if (orig_color == bg_color) continue;
 					for (int i = 0; i < bodypart_definitions.size(); ++i){		
 						if (orig_color == bp_colors[i]){
@@ -403,13 +399,12 @@ namespace PTAMM{
 				//oh yeah, look for the best frame
 				//this should probably be in a different function, but how do i access it in display...?
 				//,maybe just global vars
-			
-			
+
 				cv::Mat source_transform = current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
-				cv::Mat source_transform_texsearch = flip_z.inv() * current_transform * flip_2.inv() * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
+				cv::Mat source_transform_texsearch = flip_z.inv() * current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
 			
 				//std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform, frame_snhmaps, frame_datas, bodypart_frame_cluster[i]);
-				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform_texsearch, frame_snhmaps, frame_datas, std::vector<std::vector<int>>());
+				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform_texsearch, frame_snhmaps, frame_datas, bodypart_precalculated_rotation_vectors[i], std::vector<std::vector<int>>());
 			
 				cv::Mat neutral_pts = (camera_matrix_current * source_transform).inv() * bodypart_pts;
 			
@@ -423,13 +418,13 @@ namespace PTAMM{
 					//	std::cout << "head best frame: " << best_frame << "; actual frame: " << anim_frame << std::endl;
 					//}
 					cv::Mat target_transform = get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[best_frame], frame_datas[best_frame].mCameraPose);
-					cv::Mat bodypart_img_uncropped = uncrop_mat(frame_datas[best_frame].mBodyPartImages[i], cv::Vec3b(0xff, 0xff, 0xff));
+					//cv::Mat bodypart_img_uncropped = uncrop_mat(frame_datas[best_frame].mBodyPartImages[i], cv::Vec3b(0xff, 0xff, 0xff));
 			
 					cv::Mat neutral_pts_occluded;
 					std::vector<cv::Point2i> _2d_pts_occluded;
 			
 					inverse_point_mapping(neutral_pts, bodypart_pts_2d_v[i], frame_datas[best_frame].mCameraMatrix, target_transform,
-						bodypart_img_uncropped, output_img, neutral_pts_occluded, _2d_pts_occluded, debug_inspect_texture_map);
+						frame_datas[best_frame].mBodyPartImages[i].mMat, frame_datas[best_frame].mBodyPartImages[i].mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, debug_inspect_texture_map);
 			
 					neutral_pts = neutral_pts_occluded;
 					bodypart_pts_2d_v[i] = _2d_pts_occluded;
@@ -445,7 +440,7 @@ namespace PTAMM{
 			//now display the rendered pts
 			display_mat(output_img_flip, true);
 
-			cv::imwrite("output.png", output_img_flip);
+			//cv::imwrite("output.png", output_img_flip);
 		}
 
 
@@ -513,9 +508,15 @@ namespace PTAMM{
 			elapsed -= 1000 / FRAMERATE;
 			if (!*pause)
 			{
-				++anim_frame;
+				++current_frame_within_section;
+			}
+
+			if (current_frame_within_section > section_frames[current_section].size()){
+				current_frame_within_section = 0;
 			}
 		}
+
+		anim_frame = section_frames[current_section][current_frame_within_section];
 
 		if (anim_frame >= frame_snhmaps.size()){
 			anim_frame = 0;
@@ -523,14 +524,44 @@ namespace PTAMM{
 	}
 
 	std::string ARReenactmentGame::Save(std::string map_path){
+
+		cv::FileStorage fs;
+
+		fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
+		fs << "PTAMM_to_kinect" << PTAMM_to_kinect;
+		fs.release();
+
+		fs.open(map_path + "Camera_from_world_initial.yml", cv::FileStorage::WRITE);
+		fs << "Camera_from_world_initial" << camera_from_world_capture;
+		fs.release();
+
 		return "";
 	}
 	void ARReenactmentGame::Load(std::string map_path){
+		cv::FileStorage fs;
 
+		fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::READ);
+		fs["PTAMM_to_kinect"] >> PTAMM_to_kinect;
+		fs.release();
+
+		fs.open(map_path + "Camera_from_world_initial.yml", cv::FileStorage::READ);
+		fs["Camera_from_world_initial"] >> camera_from_world_capture;
+		fs.release();
+
+
+		fs.open(map_path + "Section_frames.yml", cv::FileStorage::READ);
+		//TO DO
+		fs.release();
+
+		Init();
 	}
 
 	void ARReenactmentGame::section_start_frame(){
 		current_frame_within_section = 0;
+	}
+
+	void ARReenactmentGame::reset_cfw(){
+		camera_from_world_capture = cv::Mat();
 	}
 
 	void ARReenactmentGame::GUICommandCallback(void *ptr, string command, string params){
@@ -554,6 +585,9 @@ namespace PTAMM{
 		}
 		else if (command == "ARR_StartFrame"){
 			g->section_start_frame();
+		}
+		else if (command == "ARR_ResetCFW"){
+			g->reset_cfw();
 		}
 	};
 }

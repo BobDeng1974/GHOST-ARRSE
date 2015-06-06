@@ -99,7 +99,7 @@ namespace PTAMM{
 			kinect_repro_pts.ptr<float>(1)[i] = color_pt.y;
 		}
 
-		cv::Mat PTAMM_to_kinect = kinect_camera_pts * ptamm_camera_pts.t() * (ptamm_camera_pts * ptamm_camera_pts.t()).inv();
+		PTAMM_to_kinect = kinect_camera_pts * ptamm_camera_pts.t() * (ptamm_camera_pts * ptamm_camera_pts.t()).inv();
 
 		cv::FileStorage fs;
 		fs.open("PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
@@ -141,7 +141,16 @@ namespace PTAMM{
 	}
 
 	std::string ARCaptureGame::Save(std::string map_path){
-		return "";
+
+		cv::FileStorage fs;
+
+		if (!PTAMM_to_kinect.empty()){
+			fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
+			fs << "PTAMM_to_kinect" << PTAMM_to_kinect;
+			fs.release();
+
+		}
+		return "dang";
 	}
 	void ARCaptureGame::Load(std::string map_path){
 

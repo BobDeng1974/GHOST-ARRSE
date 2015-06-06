@@ -37,6 +37,7 @@ namespace PTAMM{
 		static void GUICommandCallback(void *ptr, string command, string params);
 		
 		void section_start_frame();
+		void reset_cfw();
 
 		int current_section;
 		std::vector<std::vector<int>> section_frames;
@@ -58,6 +59,7 @@ namespace PTAMM{
 		std::vector<std::vector<unsigned int>> triangle_indices;
 		std::vector<std::vector<unsigned char>> triangle_colors;
 
+		std::vector<std::vector<cv::Vec3f>> bodypart_precalculated_rotation_vectors;
 		std::vector<SkeletonNodeHardMap> frame_snhmaps;
 
 		cv::Mat model_center, model_center_inv;

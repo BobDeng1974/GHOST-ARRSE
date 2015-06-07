@@ -17,7 +17,6 @@
 #include <opencv2\opencv.hpp>
 
 #include "gvars3\instances.h"
-#include "definitions.h"
 
 using namespace CVD;
 using namespace std;

@@ -1,5 +1,7 @@
 #include "KinectManager.h"
 
+#if GHOST_INPUT == INPUT_KINECT
+
 KinectManager::KinectManager():
 is_opened(false)
 {
@@ -134,3 +136,5 @@ KinectManager * KinectManager::GetKinectManager(){
 
 	return singleton_manager;
 }
+
+#endif

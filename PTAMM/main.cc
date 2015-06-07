@@ -18,26 +18,9 @@ int main()
   cout << "  Parallel tracking and multiple mapping" << endl;
   cout << "  Copyright (C) Isis Innovation Limited 2009 " << endl;
   cout << endl;
-  cout << "  Parsing settings.cfg ...." << endl;
+  cout << "  Parsing " << GHOST_CAMERA_CFG << "..." << endl;
 
-#if GHOST_INPUT == INPUT_KINECT
-  GUI.LoadFile("settingskinect.cfg");
-#endif
-#if GHOST_INPUT == INPUT_OPENNI
-  GUI.LoadFile("settingsopenni.cfg");
-#endif
-#if GHOST_INPUT == INPUT_VI
-  GUI.LoadFile("settings_vi.cfg");
-#endif
-#if GHOST_INPUT == INPUT_KINECT2
-  GUI.LoadFile("settings_kinect2.cfg");
-#endif
-#if GHOST_INPUT == INPUT_WEBCAM
-  GUI.LoadFile("settings.cfg");
-#endif
-#if GHOST_INPUT == INPUT_FILE
-  GUI.LoadFile("settings_file.cfg");
-#endif
+  GUI.LoadFile(GHOST_CAMERA_CFG);
 
   GUI.StartParserThread(); // Start parsing of the console input
   atexit(GUI.StopParserThread); 

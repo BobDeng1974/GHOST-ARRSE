@@ -39,9 +39,10 @@
     <Import Project="$(PROPERTY_SHEETS_DIR)\gvars_debug.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\OpenCV_debug.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\OpenGL.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2012\PROPERTY SHEETS\LAPack_BLAS.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\LAPack_BLAS.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\pthreads.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
+    <Import Project="..\..\..\..\Property sheets\VideoInput_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -51,9 +52,10 @@
     <Import Project="$(PROPERTY_SHEETS_DIR)\gvars.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\OpenCV.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\OpenGL.props" />
-    <Import Project="C:\Users\fabian-d\Documents\Visual Studio 2012\PROPERTY SHEETS\LAPack_BLAS.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\LAPack_BLAS.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\pthreads.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
+    <Import Project="..\..\..\..\Property sheets\VideoInput.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -78,7 +80,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>G:\Visual Studio 2013\PTAMM\KinectManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\KinectManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

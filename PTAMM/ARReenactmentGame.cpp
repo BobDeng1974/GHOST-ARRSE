@@ -27,7 +27,8 @@ namespace PTAMM{
 		bg_color(0, 0, 0),
 		temp_cam("Camera"),
 		anim_frame( 0),
-		elapsed(0)
+		elapsed(0),
+		secret_offset(27.5)
 	{
 	}
 
@@ -289,7 +290,7 @@ namespace PTAMM{
 				-camera_matrix_current.ptr<float>(1)[1],
 				camera_matrix_current.ptr<float>(0)[1],
 				camera_matrix_current.ptr<float>(0)[2],
-				camera_matrix_current.ptr<float>(1)[2] + 38,
+				camera_matrix_current.ptr<float>(1)[2] + secret_offset,
 				viewport_width,
 				viewport_height,
 				0.001, 10);
@@ -316,6 +317,11 @@ namespace PTAMM{
 
 		//render
 
+		std::vector<cv::Vec3b> bp_colors(bodypart_definitions.size());
+		for (int i = 0; i < bodypart_definitions.size(); ++i){
+			bp_colors[i] = cv::Vec3b(bodypart_definitions[i].mColor[0] * 0xff, bodypart_definitions[i].mColor[1] * 0xff, bodypart_definitions[i].mColor[2] * 0xff);
+		}
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		for (int i = 0; i < bodypart_definitions.size(); ++i){
 			glPushMatrix();
@@ -338,7 +344,7 @@ namespace PTAMM{
 
 				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
 				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
-				glColor3fv(bodypart_definitions[i].mColor);
+				glColor3ubv(&(bp_colors[i][0]));
 
 				glDrawElements(GL_TRIANGLES, triangle_indices[i].size(), GL_UNSIGNED_INT, triangle_indices[i].data());
 			}
@@ -365,10 +371,6 @@ namespace PTAMM{
 			std::vector<std::vector<cv::Vec4f>> bodypart_pts_2d_withdepth_v(bodypart_definitions.size());
 			std::vector<std::vector<cv::Point2i>> bodypart_pts_2d_v(bodypart_definitions.size());
 
-			std::vector<cv::Vec3b> bp_colors(bodypart_definitions.size());
-			for (int i = 0; i < bodypart_definitions.size(); ++i){
-				bp_colors[i] = cv::Vec3b(bodypart_definitions[i].mColor[0] * 0xff, bodypart_definitions[i].mColor[1] * 0xff, bodypart_definitions[i].mColor[2] * 0xff);
-			}
 
 			for (int y = 0; y < viewport_height; ++y){
 				for (int x = 0; x < viewport_width; ++x){
@@ -487,7 +489,16 @@ namespace PTAMM{
 
 	}
 	void ARReenactmentGame::HandleKeyPress(std::string key){
-
+		switch (tolower(key[0])){
+		case 'p':
+			secret_offset+=1;
+			opengl_projection = cv::Mat();
+			break;
+		case 'o':
+			secret_offset -= 1;
+			opengl_projection = cv::Mat();
+			break;
+		}
 	}
 	void ARReenactmentGame::Advance(){
 
@@ -511,7 +522,7 @@ namespace PTAMM{
 				++current_frame_within_section;
 			}
 
-			if (current_frame_within_section > section_frames[current_section].size()){
+			if (current_frame_within_section >= section_frames[current_section].size()){
 				current_frame_within_section = 0;
 			}
 		}
@@ -527,29 +538,29 @@ namespace PTAMM{
 
 		cv::FileStorage fs;
 
-		fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
+		fs.open(map_path + "/PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
 		fs << "PTAMM_to_kinect" << PTAMM_to_kinect;
 		fs.release();
 
-		fs.open(map_path + "Camera_from_world_initial.yml", cv::FileStorage::WRITE);
+		fs.open(map_path + "/Camera_from_world_initial.yml", cv::FileStorage::WRITE);
 		fs << "Camera_from_world_initial" << camera_from_world_capture;
 		fs.release();
 
-		return "";
+		return ".";
 	}
 	void ARReenactmentGame::Load(std::string map_path){
 		cv::FileStorage fs;
 
-		fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::READ);
+		fs.open(map_path + "/PTAMM_to_kinect.yml", cv::FileStorage::READ);
 		fs["PTAMM_to_kinect"] >> PTAMM_to_kinect;
 		fs.release();
 
-		fs.open(map_path + "Camera_from_world_initial.yml", cv::FileStorage::READ);
+		fs.open(map_path + "/Camera_from_world_initial.yml", cv::FileStorage::READ);
 		fs["Camera_from_world_initial"] >> camera_from_world_capture;
 		fs.release();
 
 
-		fs.open(map_path + "Section_frames.yml", cv::FileStorage::READ);
+		fs.open(map_path + "/Section_frames.yml", cv::FileStorage::READ);
 		//TO DO
 		fs.release();
 

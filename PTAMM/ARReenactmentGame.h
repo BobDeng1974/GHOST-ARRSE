@@ -85,5 +85,6 @@ namespace PTAMM{
 		GVars3::gvar3<int> pause;
 
 		cv::Mat camera_from_world_capture; //this should be different per frame, based on the capturing stage; for now, we'll set it to the first frame
+		float secret_offset; //sshhh!
 	};
 }

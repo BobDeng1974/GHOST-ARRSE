@@ -18,9 +18,15 @@
     <ClCompile Include="KinectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Kinect2Starter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KinectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect2Starter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,7 +39,8 @@ namespace PTAMM{
 		bg_color(0, 0, 0),
 		temp_cam("Camera"),
 		anim_frame( 0),
-		elapsed(0)
+		elapsed(0),
+		secret_offset(-22.5)
 	{
 		debug_print_dir = generate_debug_print_dir();
 		CreateDirectory(debug_print_dir.c_str(), nullptr);
@@ -85,7 +86,7 @@ namespace PTAMM{
 
 		static GVars3::gvar3<std::string> video_directory("ARReenactmentMotion", "", GVars3::SILENT);
 		static GVars3::gvar3<std::string> voxel_path("ARReenactmentVoxels", "", GVars3::SILENT);
-		int startframe = 0, numframes = 100; //TODO
+		int startframe = 0, numframes = 1000; //TODO
 		//TODO: extra data file specifically for the AR Reenactment (e.g. sections)
 
 		//load in the motion
@@ -119,6 +120,21 @@ namespace PTAMM{
 			frame_snhmaps.push_back(SkeletonNodeHardMap());
 			cv_draw_and_build_skeleton(&frame_datas[i].mRoot, cv::Mat::eye(4, 4, CV_32F), frame_datas[i].mCameraMatrix, frame_datas[i].mCameraPose, &frame_snhmaps[i]);
 		}
+
+		fs.open(*video_directory + "/section_frames.xml", cv::FileStorage::READ);
+		if (fs.isOpened()){
+			cv::FileNode node = fs["section"];
+			for (auto it = node.begin(); it != node.end(); ++it){
+				section_frames.push_back(std::vector<int>());
+				cv::FileNode node2 = (*it)["frames"];
+				for (auto it2 = node2.begin(); it2 != node2.end(); ++it2){
+					int n;
+					(*it2) >> n;
+					section_frames.back().push_back(n);
+				}
+			}
+		}
+		fs.release();
 
 		if (section_frames.empty()){
 			section_frames.push_back(std::vector<int>());
@@ -291,6 +307,8 @@ namespace PTAMM{
 		//cv::Rodrigues(cv::Vec3f(0, CV_PI / 2, 0), flip_z(cv::Range(0, 3), cv::Range(0, 3)));
 
 		cv::Mat flip_2 = cv::Mat::eye(4, 4, CV_32F);
+		//flip_2.ptr<float>(0)[0] = -1;
+
 		flip_2.ptr<float>(1)[1] = -1;
 		flip_z.ptr<float>(2)[2] = -1;
 
@@ -315,7 +333,7 @@ namespace PTAMM{
 				-camera_matrix_current.ptr<float>(1)[1],
 				camera_matrix_current.ptr<float>(0)[1],
 				camera_matrix_current.ptr<float>(0)[2],
-				camera_matrix_current.ptr<float>(1)[2] + 38,
+				camera_matrix_current.ptr<float>(1)[2] + secret_offset,
 				viewport_width,
 				viewport_height,
 				0.001, 10);
@@ -348,6 +366,11 @@ namespace PTAMM{
 		debug_fs << "bodypart_transforms" << "[";
 
 		//render
+		std::vector<cv::Vec3b> bp_colors(bodypart_definitions.size());
+		for (int i = 0; i < bodypart_definitions.size(); ++i){
+			bp_colors[i] = cv::Vec3b(bodypart_definitions[i].mColor[0] * 0xff, bodypart_definitions[i].mColor[1] * 0xff, bodypart_definitions[i].mColor[2] * 0xff);
+		}
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		for (int i = 0; i < bodypart_definitions.size(); ++i){
 			glPushMatrix();
@@ -375,7 +398,7 @@ namespace PTAMM{
 
 				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
 				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
-				glColor3fv(bodypart_definitions[i].mColor);
+				glColor3ubv(&(bp_colors[i][0]));
 
 				glDrawElements(GL_TRIANGLES, triangle_indices[i].size(), GL_UNSIGNED_INT, triangle_indices[i].data());
 			}
@@ -398,17 +421,13 @@ namespace PTAMM{
 
 			cv::Mat render_pretexture = gl_read_color(viewport[2], viewport[3]);
 
-			//cv::imwrite("renpre.png", render_pretexture);
+			cv::imwrite("renpre.png", render_pretexture);
 		
 			cv::Mat render_depth = gl_read_depth(viewport_width, viewport_height, opengl_projection);
 		
 			std::vector<std::vector<cv::Vec4f>> bodypart_pts_2d_withdepth_v(bodypart_definitions.size());
 			std::vector<std::vector<cv::Point2i>> bodypart_pts_2d_v(bodypart_definitions.size());
 
-			std::vector<cv::Vec3b> bp_colors(bodypart_definitions.size());
-			for (int i = 0; i < bodypart_definitions.size(); ++i){
-				bp_colors[i] = cv::Vec3b(bodypart_definitions[i].mColor[0] * 0xff, bodypart_definitions[i].mColor[1] * 0xff, bodypart_definitions[i].mColor[2] * 0xff);
-			}
 
 			for (int y = 0; y < viewport_height; ++y){
 				for (int x = 0; x < viewport_width; ++x){
@@ -427,6 +446,9 @@ namespace PTAMM{
 			}
 		
 			cv::Mat output_img(viewport_height, viewport_width, CV_8UC4, cv::Scalar(0, 0, 0, 0));
+			cv::Mat flip_z_2 = cv::Mat::eye(4, 4, CV_32F);
+			flip_z_2.ptr<float>(0)[0] = -1;
+			flip_z_2.ptr<float>(2)[2] = -1;
 			
 			for (int i = 0; i < bodypart_definitions.size(); ++i){
 			
@@ -441,7 +463,7 @@ namespace PTAMM{
 				//,maybe just global vars
 
 				cv::Mat source_transform = current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
-				cv::Mat source_transform_texsearch = flip_z.inv() * current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
+				cv::Mat source_transform_texsearch = flip_z_2 * current_transform * flip_2 * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
 			
 				//std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform, frame_snhmaps, frame_datas, bodypart_frame_cluster[i]);
 				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform_texsearch, frame_snhmaps, frame_datas, bodypart_precalculated_rotation_vectors[i], std::vector<std::vector<int>>());
@@ -511,6 +533,29 @@ namespace PTAMM{
 			}
 			glEnd();
 			glEnable(GL_DEPTH_TEST);
+
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glMultMatrixf(flip_2.ptr<float>());
+			glDisable(GL_DEPTH_TEST);
+			glColor3f(0.f, 0., 1.f);
+			glBegin(GL_LINES);
+			for (int i = 0; i < bodypart_definitions.size(); ++i){
+				cv::Mat endpts(4, 2, CV_32F, cv::Scalar(1));
+				endpts.ptr<float>(0)[0] = 0;
+				endpts.ptr<float>(1)[0] = 0;
+				endpts.ptr<float>(2)[0] = 0;
+				endpts.ptr<float>(0)[1] = 0;
+				endpts.ptr<float>(1)[1] = bodypart_voxels[i].height * voxel_size;
+				endpts.ptr<float>(2)[1] = 0;
+
+				endpts = get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose) * endpts;
+				glVertex3f(endpts.ptr<float>(0)[0], endpts.ptr<float>(1)[0], endpts.ptr<float>(2)[0]);
+				glVertex3f(endpts.ptr<float>(0)[1], endpts.ptr<float>(1)[1], endpts.ptr<float>(2)[1]);
+			}
+			glEnd();
+			glEnable(GL_DEPTH_TEST);
+			glPopMatrix();
 		}
 
 
@@ -527,7 +572,16 @@ namespace PTAMM{
 
 	}
 	void ARReenactmentGame::HandleKeyPress(std::string key){
-
+		switch (tolower(key[0])){
+		case 'p':
+			secret_offset+=1;
+			opengl_projection = cv::Mat();
+			break;
+		case 'o':
+			secret_offset -= 1;
+			opengl_projection = cv::Mat();
+			break;
+		}
 	}
 	void ARReenactmentGame::Advance(){
 
@@ -551,7 +605,7 @@ namespace PTAMM{
 				++current_frame_within_section;
 			}
 
-			if (current_frame_within_section > section_frames[current_section].size()){
+			if (current_frame_within_section >= section_frames[current_section].size()){
 				current_frame_within_section = 0;
 			}
 		}
@@ -567,29 +621,29 @@ namespace PTAMM{
 
 		cv::FileStorage fs;
 
-		fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
+		fs.open(map_path + "/PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
 		fs << "PTAMM_to_kinect" << PTAMM_to_kinect;
 		fs.release();
 
-		fs.open(map_path + "Camera_from_world_initial.yml", cv::FileStorage::WRITE);
+		fs.open(map_path + "/Camera_from_world_initial.yml", cv::FileStorage::WRITE);
 		fs << "Camera_from_world_initial" << camera_from_world_capture;
 		fs.release();
 
-		return "";
+		return ".";
 	}
 	void ARReenactmentGame::Load(std::string map_path){
 		cv::FileStorage fs;
 
-		fs.open(map_path + "PTAMM_to_kinect.yml", cv::FileStorage::READ);
+		fs.open(map_path + "/PTAMM_to_kinect.yml", cv::FileStorage::READ);
 		fs["PTAMM_to_kinect"] >> PTAMM_to_kinect;
 		fs.release();
 
-		fs.open(map_path + "Camera_from_world_initial.yml", cv::FileStorage::READ);
+		fs.open(map_path + "/Camera_from_world_initial.yml", cv::FileStorage::READ);
 		fs["Camera_from_world_initial"] >> camera_from_world_capture;
 		fs.release();
 
 
-		fs.open(map_path + "Section_frames.yml", cv::FileStorage::READ);
+		fs.open(map_path + "/Section_frames.yml", cv::FileStorage::READ);
 		//TO DO
 		fs.release();
 

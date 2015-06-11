@@ -6,10 +6,18 @@
 #include <fstream>
 #include <stdlib.h>
 
+#include "ghostsettings.h"
+
 //#include <KinectManager.h>
+
+#if GHOST_INPUT == INPUT_KINECT2
+#define CAPTURE_SIZE_X 1920
+#define CAPTURE_SIZE_Y 1080
+#else
 
 #define CAPTURE_SIZE_X 640
 #define CAPTURE_SIZE_Y 480
+#endif
 
 using namespace CVD;
 using namespace std;
@@ -206,8 +214,8 @@ void CameraCalibrator::GUICommandHandler(string sCommand, string sParams)  // Ca
   if(sCommand=="CameraCalibrator.SaveCalib")
     {
       cout << "  Camera calib is " << GV3::get_var("Camera.Parameters") << endl;
-      cout << "  Saving camera calib to camera.cfg..." << endl;
-      ofstream ofs("camera.cfg");
+      cout << "  Saving camera calib to " << GHOST_CAMERA_CFG << "..." << endl;
+	  ofstream ofs(GHOST_CAMERA_CFG);
       if(ofs.good())
 	{
 	  GV2.PrintVar("Camera.Parameters", ofs);

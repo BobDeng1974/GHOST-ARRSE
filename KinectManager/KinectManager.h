@@ -59,12 +59,11 @@ private:
 #if GHOST_INPUT == INPUT_KINECT2
 
 #include <opencv2\opencv.hpp>
-#include "definitions.h"
-#include "Skeleton.h"
+#include "Kinect2Starter.h"
 
 #if GHOST_CAPTURE == CAPTURE_KINECT2
-#define CAPTURE_SIZE_X 640
-#define CAPTURE_SIZE_Y 480
+#define CAPTURE_SIZE_X 640 //doesnt work at 1000 for some dumb reason. also doesnt work at 1920
+#define CAPTURE_SIZE_Y 480 //also apparently images hsve to be the same size or u cnt load. lame
 #else
 #define CAPTURE_SIZE_X	640
 #define CAPTURE_SIZE_Y	480
@@ -78,31 +77,20 @@ namespace KINECT{
 	bool release();
 	void updateFrames();
 	cv::Mat getColorFrame();
-	CroppedCvMat getPlayerColorFrame();
 	cv::Mat getDepthFrame();
-	Skeleton getSkeleton();
 	cv::Mat getUserColorFrame();
 	bool skeletonIsGood();
-	float getSkeletonGoodness(Skeleton * s);
 
 	int getCenterJoint();
 	int getHeadJoint();
-	void initMapping(Mapping * mapping);
 
 #if INIT_KINECT
 	//cv::Vec2f toScreen(cv::Vec3f);
 #endif
 
-	cv::Vec3f calculateFacing(Skeleton * s);
-	bool checkTracked(int state);
-	int initSkeletonScore(Skeleton kinectPoints);
-
 	//save/load device
 	void saveParams(std::string);
 	void loadParams(std::string);
-
-	//adds new joint to OpenNI skeletons
-	void augmentSkeleton(Skeleton * s);
 
 	//oldskool, remove later
 	struct DepthXY{

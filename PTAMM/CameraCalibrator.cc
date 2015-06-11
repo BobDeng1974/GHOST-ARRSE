@@ -10,8 +10,14 @@
 
 //#include <KinectManager.h>
 
+#if GHOST_INPUT == INPUT_KINECT2
+#define CAPTURE_SIZE_X 1920
+#define CAPTURE_SIZE_Y 1080
+#else
+
 #define CAPTURE_SIZE_X 640
 #define CAPTURE_SIZE_Y 480
+#endif
 
 using namespace CVD;
 using namespace std;

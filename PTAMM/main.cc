@@ -21,6 +21,7 @@ int main()
   cout << "  Parsing " << GHOST_CAMERA_CFG << "..." << endl;
 
   GUI.LoadFile(GHOST_CAMERA_CFG);
+  GUI.LoadFile("maptoload.cfg");
 
   GUI.StartParserThread(); // Start parsing of the console input
   atexit(GUI.StopParserThread); 

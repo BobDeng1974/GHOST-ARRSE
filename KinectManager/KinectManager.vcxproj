@@ -34,10 +34,14 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
+    <Import Project="..\..\..\..\Property sheets\Kinect2.props" />
+    <Import Project="..\..\..\..\Property sheets\OpenCV_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
+    <Import Project="..\..\..\..\Property sheets\OpenCV.props" />
+    <Import Project="..\..\..\..\Property sheets\Kinect2.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -70,9 +74,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Kinect2Starter.cpp" />
     <ClCompile Include="KinectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Kinect2Starter.h" />
     <ClInclude Include="KinectManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

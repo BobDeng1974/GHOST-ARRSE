@@ -7,6 +7,9 @@
 // available at 
 // http://www.cs.cmu.edu/~iwan/1394/
 
+#define CT_KINECT 5
+#define CT_FILE 6
+
 #define WIN32_LEAN_AND_MEAN
 #include "VideoSource.h"
 #include <Windows.h>
@@ -35,8 +38,8 @@ void GUICommandCallback(void *ptr, string sCommand, string sParams){
 VideoSource::VideoSource()//: cam(1)
 {
 	KINECT::init();
-	mirSize.x = CAPTURE_SIZE_X;
 	mirSize.y = CAPTURE_SIZE_Y;
+	mirSize.x = CAPTURE_SIZE_X;
 
 	GV2.Register(captureType, "GH_CaptureType", CT_KINECT, SILENT);
 	GV2.Register(vidPath, "GH_VidPath", "videoin/", SILENT);

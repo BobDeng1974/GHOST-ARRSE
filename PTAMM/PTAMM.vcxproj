@@ -54,6 +54,7 @@
     <Import Project="$(PROPERTY_SHEETS_DIR)\GLUT.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
     <Import Project="..\..\..\..\Property sheets\VideoInput_debug.props" />
+    <Import Project="..\..\..\..\Property sheets\Kinect2.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -79,6 +80,7 @@
     <Import Project="$(PROPERTY_SHEETS_DIR)\GLCV.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
     <Import Project="..\..\..\..\Property sheets\VideoInput.props" />
+    <Import Project="..\..\..\..\Property sheets\Kinect2.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,7 +94,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>G:\Visual Studio 2013\PTAMM\KinectManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\KinectManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -15,10 +15,22 @@
 
 namespace PTAMM{
 
+	std::string debug_print_dir;
+
+	std::string generate_debug_print_dir(){
+		std::time_t time = std::time(nullptr);
+		std::tm ltime;
+		localtime_s(&ltime, &time);
+		std::stringstream ss;
+
+		ss << "debug-PTAMM-" << ltime.tm_year << ltime.tm_mon << ltime.tm_mday << ltime.tm_hour << ltime.tm_min;
+		return ss.str();
+	}
+
 
 	ARReenactmentGame::ARReenactmentGame()
 		:Game("AR Reenactment"),
-		tsdf_offset(-0.5),
+		tsdf_offset(0),
 		debug_draw_skeleton(true),
 		debug_shape_cylinders(false),
 		debug_show_volumes(false),
@@ -29,6 +41,8 @@ namespace PTAMM{
 		anim_frame( 0),
 		elapsed(0)
 	{
+		debug_print_dir = generate_debug_print_dir();
+		CreateDirectory(debug_print_dir.c_str(), nullptr);
 	}
 
 	ARReenactmentGame::~ARReenactmentGame(){
@@ -208,6 +222,14 @@ namespace PTAMM{
 
 	void ARReenactmentGame::Draw3D(const GLWindow2 &gl_window, Map &map, SE3<> camera_from_world){
 
+		//debug
+		unsigned int timestamp = std::time(nullptr);
+		std::stringstream debug_ss;
+		debug_ss << debug_print_dir << "/" << "debug" << timestamp << ".txt";
+		cv::FileStorage debug_fs;
+		debug_fs.open(debug_ss.str(), cv::FileStorage::WRITE);
+
+
 		int ptamm_fbo;
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &ptamm_fbo);
 
@@ -276,6 +298,10 @@ namespace PTAMM{
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
 
+		//debug
+		debug_fs << "transformation" << current_transform;
+		debug_fs << "camera_from_world" << camera_from_world_mat;
+
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		CVD::glMultMatrix(camera_from_world.inverse());
@@ -297,6 +323,10 @@ namespace PTAMM{
 
 		}
 
+		//debug
+		debug_fs << "opengl_projection" << opengl_projection;
+		debug_fs << "camera_matrix_current" << camera_matrix_current;
+
 		cv::Mat opengl_projection_t = opengl_projection.t();
 		glLoadIdentity();
 		glMultMatrixf(opengl_projection_t.ptr<float>());
@@ -314,8 +344,10 @@ namespace PTAMM{
 		//glMultMatrixf(model_center_inv_t.ptr<float>());
 		glMultMatrixf(current_transform_t.ptr<float>());
 
-		//render
+		//debug
+		debug_fs << "bodypart_transforms" << "[";
 
+		//render
 		glEnableClientState(GL_VERTEX_ARRAY);
 		for (int i = 0; i < bodypart_definitions.size(); ++i){
 			glPushMatrix();
@@ -336,6 +368,11 @@ namespace PTAMM{
 				cv::Mat transform_t = (get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose) * get_voxel_transform(bodypart_voxels[i].width, bodypart_voxels[i].height, bodypart_voxels[i].depth, voxel_size)).t();
 				glMultMatrixf(transform_t.ptr<float>());
 
+				//debug
+				debug_fs << "{" << "transform" << transform_t.t()
+					<< "combined_transform" << current_transform * transform_t.t()
+					<< "}";
+
 				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
 				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
 				glColor3fv(bodypart_definitions[i].mColor);
@@ -345,6 +382,9 @@ namespace PTAMM{
 
 			glPopMatrix();
 		}
+
+		//debug
+		debug_fs << "]";
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 

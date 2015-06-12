@@ -1,3 +1,7 @@
+#include "ghostsettings.h"
+
+#if GHOST_INPUT == INPUT_KINECT2
+
 #include "Kinect2Starter.h"
 #include "KinectManager.h"
 #include <Kinect.h>
@@ -736,3 +740,5 @@ namespace KINECT{
 		return m_pCoordinateMapper;
 	}
 }
+
+#endif

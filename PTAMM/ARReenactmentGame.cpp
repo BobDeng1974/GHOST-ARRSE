@@ -10,15 +10,29 @@
 #include <gh_search.h>
 #include <gh_render.h>
 
+#include <fstream>
+
 #define MAX_SEARCH 10
 #define FRAMERATE 30
 
 namespace PTAMM{
 
+	std::string debug_print_dir;
+
+	std::string generate_debug_print_dir(){
+		std::time_t time = std::time(nullptr);
+		std::tm ltime;
+		localtime_s(&ltime, &time);
+		std::stringstream ss;
+
+		ss << "debug-PTAMM-" << ltime.tm_year << ltime.tm_mon << ltime.tm_mday << ltime.tm_hour << ltime.tm_min;
+		return ss.str();
+	}
+
 
 	ARReenactmentGame::ARReenactmentGame()
 		:Game("AR Reenactment"),
-		tsdf_offset(-0.5),
+		tsdf_offset(0),
 		debug_draw_skeleton(true),
 		debug_shape_cylinders(false),
 		debug_show_volumes(false),
@@ -28,8 +42,10 @@ namespace PTAMM{
 		temp_cam("Camera"),
 		anim_frame( 0),
 		elapsed(0),
-		secret_offset(-22.5)
+		secret_offset(38)
 	{
+		debug_print_dir = generate_debug_print_dir();
+		CreateDirectory(debug_print_dir.c_str(), nullptr);
 	}
 
 	ARReenactmentGame::~ARReenactmentGame(){
@@ -224,6 +240,14 @@ namespace PTAMM{
 
 	void ARReenactmentGame::Draw3D(const GLWindow2 &gl_window, Map &map, SE3<> camera_from_world){
 
+		//debug
+		unsigned int timestamp = std::time(nullptr);
+		std::stringstream debug_ss;
+		debug_ss << debug_print_dir << "/" << "debug" << timestamp << ".txt";
+		std::ofstream debug_os;
+		debug_os.open(debug_ss.str());
+
+
 		int ptamm_fbo;
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &ptamm_fbo);
 
@@ -290,9 +314,13 @@ namespace PTAMM{
 		flip_2.ptr<float>(1)[1] = -1;
 		flip_z.ptr<float>(2)[2] = -1;
 
-		cv::Mat current_transform = flip_z * camera_from_world_mat * camera_from_world_capture.inv() /* flip_z.inv()*/ * PTAMM_to_kinect.inv() * flip_2;// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+		cv::Mat current_transform = flip_z * camera_from_world_mat * camera_from_world_capture.inv() /* flip_z.inv()*/ * PTAMM_to_kinect.inv();// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
+
+		//debug
+		debug_os << "transformation\n" << current_transform << std::endl;
+		debug_os << "camera_from_world\n" << camera_from_world_mat << std::endl;
 
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
@@ -315,6 +343,10 @@ namespace PTAMM{
 
 		}
 
+		//debug
+		debug_os << "opengl_projection\n" << opengl_projection << std::endl;
+		debug_os << "camera_matrix_current\n" << camera_matrix_current << std::endl;
+
 		cv::Mat opengl_projection_t = opengl_projection.t();
 		glLoadIdentity();
 		glMultMatrixf(opengl_projection_t.ptr<float>());
@@ -332,8 +364,10 @@ namespace PTAMM{
 		//glMultMatrixf(model_center_inv_t.ptr<float>());
 		glMultMatrixf(current_transform_t.ptr<float>());
 
-		//render
+		//debug
+		debug_os << "bodypart_transforms\n" << "[\n";
 
+		//render
 		std::vector<cv::Vec3b> bp_colors(bodypart_definitions.size());
 		for (int i = 0; i < bodypart_definitions.size(); ++i){
 			bp_colors[i] = cv::Vec3b(bodypart_definitions[i].mColor[0] * 0xff, bodypart_definitions[i].mColor[1] * 0xff, bodypart_definitions[i].mColor[2] * 0xff);
@@ -359,6 +393,11 @@ namespace PTAMM{
 				cv::Mat transform_t = (get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose) * get_voxel_transform(bodypart_voxels[i].width, bodypart_voxels[i].height, bodypart_voxels[i].depth, voxel_size)).t();
 				glMultMatrixf(transform_t.ptr<float>());
 
+				//debug
+				debug_os << "{\n" << "transform\n" << transform_t.t()
+					<< "\ncombined_transform\n" << current_transform * transform_t.t()
+					<< "\n}\n";
+
 				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
 				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
 				glColor3ubv(&(bp_colors[i][0]));
@@ -368,6 +407,9 @@ namespace PTAMM{
 
 			glPopMatrix();
 		}
+
+		//debug
+		debug_os << "]\n";
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 

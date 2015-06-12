@@ -1,5 +1,9 @@
 #pragma once
 
+#include "ghostsettings.h"
+
+#if GHOST_INPUT == INPUT_KINECT2
+
 #include <Windows.h>
 #include <Kinect.h>
 
@@ -67,3 +71,5 @@ namespace KINECT{
 	bool getSkeletonIsGood();
 	ICoordinateMapper * getCoordinateMapper();
 }
+
+#endif

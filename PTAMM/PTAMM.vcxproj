@@ -53,8 +53,8 @@
     <Import Project="$(PROPERTY_SHEETS_DIR)\FBOLIB_debug.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\GLUT.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
-    <Import Project="..\..\..\..\Property sheets\VideoInput_debug.props" />
-    <Import Project="..\..\..\..\Property sheets\Kinect2.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\VideoInput_debug.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect2.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -79,8 +79,8 @@
     <Import Project="$(PROPERTY_SHEETS_DIR)\GLUT.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\GLCV.props" />
     <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect18.props" />
-    <Import Project="..\..\..\..\Property sheets\VideoInput.props" />
-    <Import Project="..\..\..\..\Property sheets\Kinect2.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\VideoInput.props" />
+    <Import Project="$(PROPERTY_SHEETS_DIR)\Kinect2.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

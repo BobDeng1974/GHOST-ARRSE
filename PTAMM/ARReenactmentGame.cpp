@@ -72,7 +72,7 @@ namespace PTAMM{
 
 		static GVars3::gvar3<std::string> video_directory("ARReenactmentMotion", "", GVars3::SILENT);
 		static GVars3::gvar3<std::string> voxel_path("ARReenactmentVoxels", "", GVars3::SILENT);
-		int startframe = 0, numframes = 1000; //TODO
+		int startframe = 0, numframes = 1; //TODO
 		//TODO: extra data file specifically for the AR Reenactment (e.g. sections)
 
 		//load in the motion

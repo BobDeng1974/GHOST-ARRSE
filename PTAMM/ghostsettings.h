@@ -7,7 +7,7 @@
 #define INPUT_KINECT 4
 #define INPUT_FILE 5
 
-#define GHOST_INPUT INPUT_WEBCAM
+#define GHOST_INPUT INPUT_VI
 
 #if GHOST_INPUT == INPUT_WEBCAM
 #define GHOST_CAMERA_CFG "camera-webcam.cfg"

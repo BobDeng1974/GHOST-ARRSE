@@ -135,7 +135,7 @@ namespace PTAMM{
 			kinect_repro_pts.ptr<float>(1)[i] = color_pt.y;
 
 #elif GHOST_INPUT == INPUT_KINECT2
-			if (screen_pt[0] < 0 || screen_pt[0] >= KINECT_CAPTURE_SIZE_X || screen_pt[1] < 0 || screen_pt[1] >= KINECT_CAPTURE_SIZE_Y) continue;
+			if (screen_pt[0] < 0 || screen_pt[0] >= CAPTURE_SIZE_X || screen_pt[1] < 0 || screen_pt[1] >= CAPTURE_SIZE_Y) continue;
 
 			int nu_y = screen_pt[1] / nRatio;
 			int nu_x = (screen_pt[0] + nOffsetX) / nRatio;
@@ -144,16 +144,17 @@ namespace PTAMM{
 
 			int depth_idx = (nu_y * CAPTURE_SIZE_X_COLOR + (CAPTURE_SIZE_X_COLOR - nu_x-1));
 			if (depth_idx < 0 || depth_idx >= CAPTURE_SIZE_X_COLOR*CAPTURE_SIZE_Y_COLOR) continue;
+			
 			DepthSpacePoint kinect_dsp = dsp[depth_idx];
 
-			UINT16 depth = depth_raw[(int)(kinect_dsp.Y*CAPTURE_SIZE_X_DEPTH + kinect_dsp.X)];
+			UINT16 depth = depth_raw[(int)(kinect_dsp.Y*CAPTURE_SIZE_X_DEPTH + CAPTURE_SIZE_X_DEPTH - kinect_dsp.X - 1)];
 
 			CameraSpacePoint csp;
 			coordinate_mapper->MapDepthPointToCameraSpace(kinect_dsp, depth, &csp);
 
 			if (isinf(csp.X) ||isinf(csp.Y)||isinf(csp.Z)|| screen_pt[0]<0.001 || screen_pt[1] < 0.001) continue;
 
-			kinect_camera_pts.ptr<float>(0)[i] = csp.X;
+			kinect_camera_pts.ptr<float>(0)[i] = -csp.X;
 			kinect_camera_pts.ptr<float>(1)[i] = csp.Y;
 			kinect_camera_pts.ptr<float>(2)[i] = csp.Z;
 			kinect_camera_pts.ptr<float>(3)[i] = 1;
@@ -213,6 +214,23 @@ namespace PTAMM{
 		}
 
 		delete[] dsp;
+
+		int ht = KINECT::getColorHeight(), wd = KINECT::getColorWidth();
+
+		cv::Mat im = cv::Mat(ht, wd, CV_8UC4, KINECT::GetColorRGBX()).clone();
+		for (int y = 0; y < ht; ++y){
+			for (int x = 0; x < wd; ++x){
+				im.ptr<cv::Vec4b>(y)[x](3) = 0xff;
+			}
+		}
+
+		for (int i = 0; i<nCameraPoints; ++i){
+			cv::circle(im, cv::Point((ptamm_2d_pts.ptr<float>(0)[i] + nOffsetX)/nRatio, ptamm_2d_pts.ptr<float>(1)[i]/nRatio), 2, cv::Scalar(0xff, 0, 0, 0xff), -1);
+			cv::circle(im, cv::Point((kinect_repro_pts.ptr<float>(0)[i] + nOffsetX)/nRatio, kinect_repro_pts.ptr<float>(1)[i]/nRatio), 4, cv::Scalar(0, 0, 0xff, 0xff), 1);
+		}
+
+		cv::imwrite("calib-results.png", im);
+		
 #endif
 
 		double repro_SSD = 0;

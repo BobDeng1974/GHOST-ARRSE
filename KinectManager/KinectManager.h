@@ -35,6 +35,8 @@ public:
 	bool IsOpened();
 
 	INuiSensor * GetSensor();
+	HANDLE GetRGBStream();
+	HANDLE GetDepthStream();
 
 	static KinectManager * GetKinectManager();
 

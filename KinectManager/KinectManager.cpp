@@ -127,6 +127,13 @@ INuiSensor * KinectManager::GetSensor(){
 	return sensor;
 }
 
+HANDLE KinectManager::GetRGBStream(){
+	return rgb_stream;
+}
+HANDLE KinectManager::GetDepthStream(){
+	return depth_stream;
+}
+
 static KinectManager * singleton_manager;
 
 KinectManager * KinectManager::GetKinectManager(){

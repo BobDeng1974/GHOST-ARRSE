@@ -272,6 +272,17 @@ namespace PTAMM{
 		//camera_matrix_current.ptr<float>(0)[2] = 2.5479405212402344e+002;
 		//camera_matrix_current.ptr<float>(1)[2] = 2.0673567199707031e+002;
 
+		cv::Mat flip_all = cv::Mat::eye(4, 4, CV_32F);
+		flip_all.ptr<float>(0)[0] = -1;
+		flip_all.ptr<float>(1)[1] = 1;
+		flip_all.ptr<float>(2)[2] = 1;
+
+		cv::Mat flip_z = cv::Mat::eye(4, 4, CV_32F);
+		flip_all.ptr<float>(2)[2] = -1;
+
+		cv::Mat flip_2 = cv::Mat::eye(4, 4, CV_32F);
+		flip_2.ptr<float>(1)[1] = -1;
+
 		//convert camera_from_world into a cv::Mat
 		cv::Mat camera_from_world_mat = cv::Mat::eye(4, 4, CV_32F);
 		{
@@ -291,23 +302,16 @@ namespace PTAMM{
 			camera_from_world_mat.ptr<float>(1)[3] = translation_vector[1];
 			camera_from_world_mat.ptr<float>(2)[3] = translation_vector[2];
 
-			cv::Mat flip_all = cv::Mat::eye(4, 4, CV_32F);
-			flip_all.ptr<float>(0)[0] = -1;
-			flip_all.ptr<float>(1)[1] = -1;
-			flip_all.ptr<float>(2)[2] = -1;
-
-			camera_from_world_mat = flip_all * camera_from_world_mat;
+			
+			//camera_from_world_mat = flip_all * camera_from_world_mat;
 		}
 
 		if (camera_from_world_capture.empty()){
 			camera_from_world_capture = camera_from_world_mat.clone();
 		}
 
-		cv::Mat flip_2 = cv::Mat::eye(4, 4, CV_32F);
-		flip_2.ptr<float>(1)[1] = -1;
-
 		//cv::Mat current_transform = camera_from_world_mat * model_center_inv; 
-		cv::Mat current_transform = camera_from_world_mat * camera_from_world_capture.inv() * PTAMM_to_kinect.inv() * flip_2;// *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+		cv::Mat current_transform = flip_all * PTAMM_to_kinect * flip_z * camera_from_world_mat * camera_from_world_capture.inv() * flip_z * PTAMM_to_kinect.inv() * flip_all; // *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
 

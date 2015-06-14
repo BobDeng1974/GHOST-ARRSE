@@ -33,7 +33,7 @@ namespace PTAMM{
 	ARReenactmentGame::ARReenactmentGame()
 		:Game("AR Reenactment"),
 		tsdf_offset(0),
-		debug_draw_skeleton(true),
+		debug_draw_skeleton(false),
 		debug_shape_cylinders(false),
 		debug_show_volumes(false),
 		debug_inspect_texture_map(false),
@@ -311,13 +311,19 @@ namespace PTAMM{
 		}
 
 		//cv::Mat current_transform = camera_from_world_mat * model_center_inv; 
-		cv::Mat current_transform = flip_all * PTAMM_to_kinect * flip_z * camera_from_world_mat * camera_from_world_capture.inv() * flip_z * PTAMM_to_kinect.inv() * flip_all; // *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+		//cv::Mat current_transform = flip_all * PTAMM_to_kinect * flip_z * camera_from_world_mat * camera_from_world_capture.inv() * flip_z * PTAMM_to_kinect.inv() * flip_all; // *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+		cv::Mat current_transform = PTAMM_to_kinect * flip_all * camera_from_world_mat * camera_from_world_capture.inv() * flip_all * PTAMM_to_kinect.inv(); // *model_center_inv; //multiply PTAMM to Kinect inverse (B^-1); camera from world := A
+
 		//current_transform = cv::Mat::eye(4, 4, CV_32F);
 		cv::Mat current_transform_t = current_transform.t();
 
 		//debug
 		debug_os << "transformation\n" << current_transform << std::endl;
 		debug_os << "camera_from_world\n" << camera_from_world_mat << std::endl;
+		debug_os << "camera_from_world_inv\n" << camera_from_world_capture.inv() << std::endl;
+		debug_os << "camera_from_world_times_inv\n" << camera_from_world_mat * camera_from_world_capture.inv() << std::endl;
+		debug_os << "ptamm_to_kinect_inv\n" << PTAMM_to_kinect.inv() << std::endl;
+		debug_os << "camera_from_world_inv_times_p2k_inv\n" << camera_from_world_capture.inv() * PTAMM_to_kinect.inv() << std::endl;
 
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();

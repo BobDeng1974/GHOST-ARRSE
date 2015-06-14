@@ -54,8 +54,8 @@ namespace PTAMM{
 
 		//dont actually draw
 		int nCameraPoints = map.vpPoints.size();
-		cv::Mat ptamm_camera_pts(4, nCameraPoints, CV_32F, cv::Scalar(0));
-		cv::Mat kinect_camera_pts(4, nCameraPoints, CV_32F, cv::Scalar(0));
+		cv::Mat ptamm_camera_pts(3, nCameraPoints, CV_32F, cv::Scalar(0));
+		cv::Mat kinect_camera_pts(3, nCameraPoints, CV_32F, cv::Scalar(0));
 
 		cv::Mat ptamm_2d_pts(2, nCameraPoints, CV_32F, cv::Scalar(0));
 		cv::Mat kinect_repro_pts(2, nCameraPoints, CV_32F, cv::Scalar(0));
@@ -129,7 +129,7 @@ namespace PTAMM{
 			kinect_camera_pts.ptr<float>(0)[i] = skeleton_pt.x;
 			kinect_camera_pts.ptr<float>(1)[i] = skeleton_pt.y;
 			kinect_camera_pts.ptr<float>(2)[i] = skeleton_pt.z;
-			kinect_camera_pts.ptr<float>(3)[i] = skeleton_pt.w;
+			//kinect_camera_pts.ptr<float>(3)[i] = skeleton_pt.w;
 			
 			kinect_repro_pts.ptr<float>(0)[i] = color_pt.x;
 			kinect_repro_pts.ptr<float>(1)[i] = color_pt.y;
@@ -157,18 +157,20 @@ namespace PTAMM{
 			kinect_camera_pts.ptr<float>(0)[i] = -csp.X;
 			kinect_camera_pts.ptr<float>(1)[i] = csp.Y;
 			kinect_camera_pts.ptr<float>(2)[i] = csp.Z;
-			kinect_camera_pts.ptr<float>(3)[i] = 1;
+			//kinect_camera_pts.ptr<float>(3)[i] = 1;
 #endif
 
 			ptamm_camera_pts.ptr<float>(0)[i] = camera_pt[0];
 			ptamm_camera_pts.ptr<float>(1)[i] = camera_pt[1];
 			ptamm_camera_pts.ptr<float>(2)[i] = camera_pt[2];
-			ptamm_camera_pts.ptr<float>(3)[i] = 1;
+			//ptamm_camera_pts.ptr<float>(3)[i] = 1;
 			ptamm_2d_pts.ptr<float>(0)[i] = screen_pt[0];
 			ptamm_2d_pts.ptr<float>(1)[i] = screen_pt[1];
 		}
 
-		PTAMM_to_kinect = kinect_camera_pts * ptamm_camera_pts.t() * (ptamm_camera_pts * ptamm_camera_pts.t()).inv();
+		cv::Mat PTAMM_to_kinect_3 = kinect_camera_pts * ptamm_camera_pts.t() * (ptamm_camera_pts * ptamm_camera_pts.t()).inv();
+		PTAMM_to_kinect = cv::Mat::eye(4, 4, CV_32F);
+		PTAMM_to_kinect_3.copyTo(PTAMM_to_kinect(cv::Range(0, 3), cv::Range(0, 3)));
 
 		cv::FileStorage fs;
 		fs.open("PTAMM_to_kinect.yml", cv::FileStorage::WRITE);

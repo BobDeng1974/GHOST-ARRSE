@@ -39,6 +39,7 @@ namespace PTAMM{
 		
 		void section_start_frame();
 		void reset_cfw();
+		void save_cfw();
 
 		int current_section;
 		std::vector<std::vector<int>> section_frames;
@@ -88,5 +89,7 @@ namespace PTAMM{
 
 		cv::Mat camera_from_world_capture; //this should be different per frame, based on the capturing stage; for now, we'll set it to the first frame
 		float secret_offset; //sshhh!
+
+		std::string PTAMM_map_path;
 	};
 }

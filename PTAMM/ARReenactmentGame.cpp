@@ -51,7 +51,8 @@ namespace PTAMM{
 		temp_cam("Camera"),
 		anim_frame( 0),
 		elapsed(0),
-		secret_offset(-12)
+		secret_offset(-12),
+		PTAMM_map_path("")
 	{
 		debug_print_dir = generate_debug_print_dir();
 		CreateDirectory(debug_print_dir.c_str(), nullptr);
@@ -76,6 +77,7 @@ namespace PTAMM{
 		GVars3::GUI.RegisterCommand("ARR_PrevSection", GUICommandCallback, this);
 		GVars3::GUI.RegisterCommand("ARR_StartFrame", GUICommandCallback, this);
 		GVars3::GUI.RegisterCommand("ARR_ResetCFW", GUICommandCallback, this);
+		GVars3::GUI.RegisterCommand("ARR_SaveCFW", GUICommandCallback, this);
 
 		GVars3::GV2.Register(pause, "ARR_Pause", 0, GVars3::SILENT);
 
@@ -89,6 +91,7 @@ namespace PTAMM{
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Start Frame\" ARR_StartFrame Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuToggle Root \"Pause\" ARR_Pause Root");
 			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Reset CFW\" ARR_ResetCFW Root");
+			GVars3::GUI.ParseLine("ARRMenu.AddMenuButton Root \"Save CFW\" ARR_SaveCFW Root");
 			arr_menus_added = true;
 		}
 
@@ -713,7 +716,9 @@ namespace PTAMM{
 		fs << "Camera_from_world_initial" << camera_from_world_capture;
 		fs.release();
 
-		return ".";
+		PTAMM_map_path = map_path;
+
+		return "/";
 	}
 	void ARReenactmentGame::Load(std::string map_path){
 		cv::FileStorage fs;
@@ -731,6 +736,8 @@ namespace PTAMM{
 		//TO DO
 		fs.release();
 
+		PTAMM_map_path = map_path;
+
 		Init();
 	}
 
@@ -740,6 +747,17 @@ namespace PTAMM{
 
 	void ARReenactmentGame::reset_cfw(){
 		camera_from_world_capture = cv::Mat();
+	}
+
+	void ARReenactmentGame::save_cfw(){
+		cv::FileStorage fs;
+		fs.open(PTAMM_map_path + "/Camera_from_world_initial.yml", cv::FileStorage::WRITE);
+		fs << "Camera_from_world_initial" << camera_from_world_capture;
+		fs.release();
+
+		fs.open(PTAMM_map_path + "PTAMM_to_kinect.yml", cv::FileStorage::WRITE);
+		fs << "PTAMM_to_kinect" << PTAMM_to_kinect;
+		fs.release();
 	}
 
 	void ARReenactmentGame::GUICommandCallback(void *ptr, string command, string params){
@@ -766,6 +784,9 @@ namespace PTAMM{
 		}
 		else if (command == "ARR_ResetCFW"){
 			g->reset_cfw();
+		}
+		else if (command == "ARR_SaveCFW"){
+			g->save_cfw();
 		}
 	};
 }

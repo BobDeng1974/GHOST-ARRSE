@@ -12,8 +12,17 @@
 
 #include <fstream>
 
-#define MAX_SEARCH 10
+#define MAX_SEARCH 20
 #define FRAMERATE 30
+
+
+void load_packaged_file(std::string filename,
+	BodyPartDefinitionVector& bpdv,
+	std::vector<FrameDataProcessed>& frame_datas,
+	BodypartFrameCluster& bodypart_frame_cluster,
+	std::vector<std::vector<float>>& triangle_vertices,
+	std::vector<std::vector<unsigned int>>& triangle_indices,
+	std::vector<VoxelMatrix>& voxels, float& voxel_size);
 
 namespace PTAMM{
 
@@ -42,7 +51,7 @@ namespace PTAMM{
 		temp_cam("Camera"),
 		anim_frame( 0),
 		elapsed(0),
-		secret_offset(38)
+		secret_offset(-12)
 	{
 		debug_print_dir = generate_debug_print_dir();
 		CreateDirectory(debug_print_dir.c_str(), nullptr);
@@ -86,59 +95,195 @@ namespace PTAMM{
 
 		GVars3::GUI.LoadFile("reenactment.cfg"); //this file should define: ARReenactmentMotion and ARReenactmentVoxels
 
-		static GVars3::gvar3<std::string> video_directory("ARReenactmentMotion", "", GVars3::SILENT);
-		static GVars3::gvar3<std::string> voxel_path("ARReenactmentVoxels", "", GVars3::SILENT);
+		static GVars3::gvar3<std::string> gv_video_directory("ARReenactmentMotion", "", GVars3::SILENT);
+		static GVars3::gvar3<std::string> gv_voxel_path("ARReenactmentVoxels", "", GVars3::SILENT);
 		static GVars3::gvar3<int> gv_startframe("ARReenactmentStartFrame", 0, GVars3::SILENT);
 		static GVars3::gvar3<int> gv_numframes("ARReenactmentNumFrames", 1, GVars3::SILENT);
-		int startframe = *gv_startframe, numframes = *gv_numframes;
+		static GVars3::gvar3<std::string> gv_package_directory("ARReenactmentPackage", "", GVars3::SILENT);
+		static GVars3::gvar3<std::string> gv_sectionframes_directory("ARReenactmentSectionFrames", "", GVars3::SILENT);
+		static GVars3::gvar3<int> gv_secret_offset("ARReenactmentSecretOffset", 0, GVars3::SILENT);
 		//TODO: extra data file specifically for the AR Reenactment (e.g. sections)
 
-		//load in the motion
-		std::stringstream filename_ss;
+		std::string package_directory = *gv_package_directory;
+		secret_offset = *gv_secret_offset;
+
 		cv::FileStorage fs;
-		filename_ss << *video_directory << "/bodypartdefinitions.xml.gz";
 
-		fs.open(filename_ss.str(), cv::FileStorage::READ);
-		for (auto it = fs["bodypartdefinitions"].begin();
-			it != fs["bodypartdefinitions"].end();
-			++it){
-			BodyPartDefinition bpd;
-			read(*it, bpd);
-			bodypart_definitions.push_back(bpd);
-		}
-		fs.release();
+		if (package_directory == ""){
 
-		std::string extension = ".xml.gz";
+			int startframe = *gv_startframe, numframes = *gv_numframes;
+			std::string video_directory = *gv_video_directory;
+			std::string voxel_path = *gv_voxel_path;
+			//load in the motion
+			std::stringstream filename_ss;
+			filename_ss << video_directory << "/bodypartdefinitions.xml.gz";
 
-		//load frames
-		std::vector<std::string> filenames;
-		for (int i = startframe; i < startframe + numframes; ++i){
-			filename_ss.str("");
-			filename_ss << *video_directory << "/" << i << extension;
-			filenames.push_back(filename_ss.str());
-		}
-		load_processed_frames(filenames, extension, bodypart_definitions.size(), frame_datas, true);
+			fs.open(filename_ss.str(), cv::FileStorage::READ);
+			for (auto it = fs["bodypartdefinitions"].begin();
+				it != fs["bodypartdefinitions"].end();
+				++it){
+				BodyPartDefinition bpd;
+				read(*it, bpd);
+				bodypart_definitions.push_back(bpd);
+			}
+			fs.release();
 
-		//build snhmaps
-		for (int i = 0; i < frame_datas.size(); ++i){
-			frame_snhmaps.push_back(SkeletonNodeHardMap());
-			cv_draw_and_build_skeleton(&frame_datas[i].mRoot, cv::Mat::eye(4, 4, CV_32F), frame_datas[i].mCameraMatrix, frame_datas[i].mCameraPose, &frame_snhmaps[i]);
-		}
+			std::string extension = ".xml.gz";
 
-		fs.open(*video_directory + "/section_frames.xml", cv::FileStorage::READ);
-		if (fs.isOpened()){
-			cv::FileNode node = fs["section"];
-			for (auto it = node.begin(); it != node.end(); ++it){
-				section_frames.push_back(std::vector<int>());
-				cv::FileNode node2 = (*it)["frames"];
-				for (auto it2 = node2.begin(); it2 != node2.end(); ++it2){
-					int n;
-					(*it2) >> n;
-					section_frames.back().push_back(n);
+			//load frames
+			std::vector<std::string> filenames;
+			for (int i = startframe; i < startframe + numframes; ++i){
+				filename_ss.str("");
+				filename_ss << video_directory << "/" << i << extension;
+				filenames.push_back(filename_ss.str());
+			}
+			load_processed_frames(filenames, extension, bodypart_definitions.size(), frame_datas, true);
+
+			//build snhmaps
+			for (int i = 0; i < frame_datas.size(); ++i){
+				frame_snhmaps.push_back(SkeletonNodeHardMap());
+				cv_draw_and_build_skeleton(&frame_datas[i].mRoot, cv::Mat::eye(4, 4, CV_32F), frame_datas[i].mCameraMatrix, frame_datas[i].mCameraPose, &frame_snhmaps[i]);
+			}
+
+			std::string sectionframes_directory;
+			if (*gv_sectionframes_directory == ""){
+				sectionframes_directory = video_directory + "/section_frames.xml";
+			}
+			else{
+				sectionframes_directory = *gv_sectionframes_directory;
+			}
+
+			fs.open(sectionframes_directory, cv::FileStorage::READ);
+			if (fs.isOpened()){
+				cv::FileNode node = fs["section"];
+				for (auto it = node.begin(); it != node.end(); ++it){
+					section_frames.push_back(std::vector<int>());
+					cv::FileNode node2 = (*it)["frames"];
+					for (auto it2 = node2.begin(); it2 != node2.end(); ++it2){
+						int n;
+						(*it2) >> n;
+						section_frames.back().push_back(n);
+					}
+				}
+			}
+			fs.release();
+
+
+			//calculate model center in frame 0
+			//cv::Vec4f center_pt(0, 0, 0, 0);
+			//
+			//for (int i = 0; i < bodypart_definitions.size(); ++i){
+			//	cv::Mat bp_pt_m = get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[0], frame_datas[0].mCameraPose)(cv::Range(0, 4), cv::Range(3, 4));
+			//	cv::Vec4f bp_pt = bp_pt_m;
+			//	center_pt += bp_pt;
+			//}
+			//
+			//center_pt /= center_pt(3);
+			//
+			//model_center = cv::Mat::eye(4, 4, CV_32F);
+			//cv::Mat(center_pt).copyTo(model_center(cv::Range(0, 4), cv::Range(3, 4)));
+			//model_center_inv = model_center.inv();
+
+			bodypart_frame_cluster = cluster_frames(64, bodypart_definitions, frame_snhmaps, frame_datas, 1000);
+
+			//load voxels & do marching cubes
+			load_voxels(voxel_path, bodypart_cylinders, bodypart_voxels, bodypart_TSDF_array, bodypart_weight_array, voxel_size);
+
+			triangle_vertices.resize(bodypart_definitions.size());
+			triangle_indices.resize(bodypart_definitions.size());
+			triangle_colors.resize(bodypart_definitions.size());
+
+			double num_vertices = 0;
+			for (int i = 0; i < bodypart_definitions.size(); ++i){
+				std::vector<TRIANGLE> tri_add;
+
+				cv::add(tsdf_offset * cv::Mat::ones(bodypart_TSDF_array[i].rows, bodypart_TSDF_array[i].cols, CV_32F), bodypart_TSDF_array[i], bodypart_TSDF_array[i]);
+
+				if (bodypart_TSDF_array[i].empty()){
+					tri_add = marchingcubes_bodypart(bodypart_voxels[i], voxel_size);
+				}
+				else{
+					tri_add = marchingcubes_bodypart(bodypart_voxels[i], bodypart_TSDF_array[i], voxel_size);
+				}
+				std::vector<cv::Vec4f> vertices;
+				std::vector<unsigned int> vertex_indices;
+				for (int j = 0; j < tri_add.size(); ++j){
+					for (int k = 0; k < 3; ++k){
+						cv::Vec4f candidate_vertex = tri_add[j].p[k];
+
+						bool vertices_contains_vertex = false;
+						int vertices_index;
+						for (int l = 0; l < vertices.size(); ++l){
+							if (vertices[l] == candidate_vertex){
+								vertices_contains_vertex = true;
+								vertices_index = l;
+								break;
+							}
+						}
+						if (!vertices_contains_vertex){
+							vertices.push_back(candidate_vertex);
+							vertices_index = vertices.size() - 1;
+						}
+						vertex_indices.push_back(vertices_index);
+					}
+				}
+				triangle_vertices[i].reserve(vertices.size() * 3);
+				triangle_colors[i].reserve(vertices.size() * 3);
+				triangle_indices[i].reserve(vertex_indices.size());
+				for (int j = 0; j < vertices.size(); ++j){
+					triangle_vertices[i].push_back(vertices[j](0));
+					triangle_vertices[i].push_back(vertices[j](1));
+					triangle_vertices[i].push_back(vertices[j](2));
+					triangle_colors[i].push_back(bodypart_definitions[i].mColor[0] * 255);
+					triangle_colors[i].push_back(bodypart_definitions[i].mColor[1] * 255);
+					triangle_colors[i].push_back(bodypart_definitions[i].mColor[2] * 255);
+				}
+				num_vertices += vertices.size();
+				for (int j = 0; j < vertex_indices.size(); ++j){
+					triangle_indices[i].push_back(vertex_indices[j]);
 				}
 			}
 		}
-		fs.release();
+		else{
+
+			load_packaged_file(package_directory, bodypart_definitions, frame_datas, bodypart_frame_cluster, triangle_vertices, triangle_indices, bodypart_voxels, voxel_size);
+			triangle_colors.resize(bodypart_definitions.size());
+			for (int i = 0; i < bodypart_definitions.size(); ++i){
+				for (int j = 0; j < triangle_indices[i].size(); ++j){
+					triangle_colors[i].push_back(bodypart_definitions[i].mColor[0] * 0xff);
+				}
+			}
+			for (int i = 0; i < frame_datas.size(); ++i){
+				frame_snhmaps.push_back(SkeletonNodeHardMap());
+				cv_draw_and_build_skeleton(&frame_datas[i].mRoot, cv::Mat::eye(4, 4, CV_32F), frame_datas[i].mCameraMatrix, frame_datas[i].mCameraPose, &frame_snhmaps[i]);
+			}
+
+
+			std::string sectionframes_directory;
+			if (*gv_sectionframes_directory == ""){
+			}
+			else{
+				sectionframes_directory = *gv_sectionframes_directory;
+
+				fs.open(sectionframes_directory, cv::FileStorage::READ);
+				if (fs.isOpened()){
+					cv::FileNode node = fs["section"];
+					for (auto it = node.begin(); it != node.end(); ++it){
+						section_frames.push_back(std::vector<int>());
+						cv::FileNode node2 = (*it)["frames"];
+						for (auto it2 = node2.begin(); it2 != node2.end(); ++it2){
+							int n;
+							(*it2) >> n;
+							section_frames.back().push_back(n);
+						}
+					}
+				}
+				fs.release();
+			}
+
+
+
+		}
 
 		if (section_frames.empty()){
 			section_frames.push_back(std::vector<int>());
@@ -148,78 +293,6 @@ namespace PTAMM{
 			}
 		}
 
-		//calculate model center in frame 0
-		cv::Vec4f center_pt(0, 0, 0, 0);
-
-		for (int i = 0; i < bodypart_definitions.size(); ++i){
-			cv::Mat bp_pt_m = get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[0], frame_datas[0].mCameraPose)(cv::Range(0, 4), cv::Range(3, 4));
-			cv::Vec4f bp_pt = bp_pt_m;
-			center_pt += bp_pt;
-		}
-
-		center_pt /= center_pt(3);
-
-		model_center = cv::Mat::eye(4, 4, CV_32F);
-		cv::Mat(center_pt).copyTo(model_center(cv::Range(0, 4), cv::Range(3, 4)));
-		model_center_inv = model_center.inv();
-
-		//load voxels & do marching cubes
-		load_voxels(*voxel_path, bodypart_cylinders, bodypart_voxels, bodypart_TSDF_array, bodypart_weight_array, voxel_size);
-
-		triangle_vertices.resize(bodypart_definitions.size());
-		triangle_indices.resize(bodypart_definitions.size());
-		triangle_colors.resize(bodypart_definitions.size());
-
-		double num_vertices = 0;
-		for (int i = 0; i < bodypart_definitions.size(); ++i){
-			std::vector<TRIANGLE> tri_add;
-
-			cv::add(tsdf_offset * cv::Mat::ones(bodypart_TSDF_array[i].rows, bodypart_TSDF_array[i].cols, CV_32F), bodypart_TSDF_array[i], bodypart_TSDF_array[i]);
-
-			if (bodypart_TSDF_array[i].empty()){
-				tri_add = marchingcubes_bodypart(bodypart_voxels[i], voxel_size);
-			}
-			else{
-				tri_add = marchingcubes_bodypart(bodypart_voxels[i], bodypart_TSDF_array[i], voxel_size);
-			}
-			std::vector<cv::Vec4f> vertices;
-			std::vector<unsigned int> vertex_indices;
-			for (int j = 0; j < tri_add.size(); ++j){
-				for (int k = 0; k < 3; ++k){
-					cv::Vec4f candidate_vertex = tri_add[j].p[k];
-
-					bool vertices_contains_vertex = false;
-					int vertices_index;
-					for (int l = 0; l < vertices.size(); ++l){
-						if (vertices[l] == candidate_vertex){
-							vertices_contains_vertex = true;
-							vertices_index = l;
-							break;
-						}
-					}
-					if (!vertices_contains_vertex){
-						vertices.push_back(candidate_vertex);
-						vertices_index = vertices.size() - 1;
-					}
-					vertex_indices.push_back(vertices_index);
-				}
-			}
-			triangle_vertices[i].reserve(vertices.size() * 3);
-			triangle_colors[i].reserve(vertices.size() * 3);
-			triangle_indices[i].reserve(vertex_indices.size());
-			for (int j = 0; j < vertices.size(); ++j){
-				triangle_vertices[i].push_back(vertices[j](0));
-				triangle_vertices[i].push_back(vertices[j](1));
-				triangle_vertices[i].push_back(vertices[j](2));
-				triangle_colors[i].push_back(bodypart_definitions[i].mColor[0] * 255);
-				triangle_colors[i].push_back(bodypart_definitions[i].mColor[1] * 255);
-				triangle_colors[i].push_back(bodypart_definitions[i].mColor[2] * 255);
-			}
-			num_vertices += vertices.size();
-			for (int j = 0; j < vertex_indices.size(); ++j){
-				triangle_indices[i].push_back(vertex_indices[j]);
-			}
-		}
 		camera_matrix_current = cv::Mat::eye(4, 4, CV_32F);
 
 		if (PTAMM_to_kinect.empty()){
@@ -243,11 +316,11 @@ namespace PTAMM{
 	void ARReenactmentGame::Draw3D(const GLWindow2 &gl_window, Map &map, SE3<> camera_from_world){
 
 		//debug
-		unsigned int timestamp = std::time(nullptr);
-		std::stringstream debug_ss;
-		debug_ss << debug_print_dir << "/" << "debug" << timestamp << ".txt";
-		std::ofstream debug_os;
-		debug_os.open(debug_ss.str());
+		//unsigned int timestamp = std::time(nullptr);
+		//std::stringstream debug_ss;
+		//debug_ss << debug_print_dir << "/" << "debug" << timestamp << ".txt";
+		//std::ofstream debug_os;
+		//debug_os.open(debug_ss.str());
 
 
 		int ptamm_fbo;
@@ -320,21 +393,21 @@ namespace PTAMM{
 		cv::Mat current_transform_t = current_transform.t();
 
 		//debug
-		debug_os << "transformation\n" << current_transform << std::endl;
-		debug_os << "camera_from_world\n" << camera_from_world_mat << std::endl;
-		debug_os << "camera_from_world_inv\n" << camera_from_world_capture.inv() << std::endl;
-		debug_os << "camera_from_world_times_inv\n" << camera_from_world_mat * camera_from_world_capture.inv() << std::endl;
-		debug_os << "ptamm_to_kinect_inv\n" << PTAMM_to_kinect.inv() << std::endl;
-		debug_os << "camera_from_world_inv_times_p2k_inv\n" << camera_from_world_capture.inv() * PTAMM_to_kinect.inv() << std::endl;
+		//debug_os << "transformation\n" << current_transform << std::endl;
+		//debug_os << "camera_from_world\n" << camera_from_world_mat << std::endl;
+		//debug_os << "camera_from_world_inv\n" << camera_from_world_capture.inv() << std::endl;
+		//debug_os << "camera_from_world_times_inv\n" << camera_from_world_mat * camera_from_world_capture.inv() << std::endl;
+		//debug_os << "ptamm_to_kinect_inv\n" << PTAMM_to_kinect.inv() << std::endl;
+		//debug_os << "camera_from_world_inv_times_p2k_inv\n" << camera_from_world_capture.inv() * PTAMM_to_kinect.inv() << std::endl;
 
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		CVD::glMultMatrix(camera_from_world.inverse());
 
 		//debug
-		cv::Mat old_projection_t(4, 4, CV_32F);
-		glGetFloatv(GL_PROJECTION_MATRIX, old_projection_t.ptr<float>());
-		debug_os << "ptamm_old_projection\n" << old_projection_t.t() << std::endl;
+		//cv::Mat old_projection_t(4, 4, CV_32F);
+		//glGetFloatv(GL_PROJECTION_MATRIX, old_projection_t.ptr<float>());
+		//debug_os << "ptamm_old_projection\n" << old_projection_t.t() << std::endl;
 
 		if (opengl_projection.empty()){
 			//opengl_projection.create(4, 4, CV_32F);
@@ -354,8 +427,8 @@ namespace PTAMM{
 		}
 
 		//debug
-		debug_os << "opengl_projection\n" << opengl_projection << std::endl;
-		debug_os << "camera_matrix_current\n" << camera_matrix_current << std::endl;
+		//debug_os << "opengl_projection\n" << opengl_projection << std::endl;
+		//debug_os << "camera_matrix_current\n" << camera_matrix_current << std::endl;
 
 		cv::Mat opengl_projection_t = opengl_projection.t();
 		glLoadIdentity();
@@ -375,7 +448,7 @@ namespace PTAMM{
 		glMultMatrixf(current_transform_t.ptr<float>());
 
 		//debug
-		debug_os << "bodypart_transforms\n" << "[\n";
+		//debug_os << "bodypart_transforms\n" << "[\n";
 
 		//render
 		std::vector<cv::Vec3b> bp_colors(bodypart_definitions.size());
@@ -404,9 +477,9 @@ namespace PTAMM{
 				glMultMatrixf(transform_t.ptr<float>());
 
 				//debug
-				debug_os << "{\n" << "transform\n" << transform_t.t()
-					<< "\ncombined_transform\n" << current_transform * transform_t.t()
-					<< "\n}\n";
+				//debug_os << "{\n" << "transform\n" << transform_t.t()
+				//	<< "\ncombined_transform\n" << current_transform * transform_t.t()
+				//	<< "\n}\n";
 
 				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
 				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
@@ -419,7 +492,7 @@ namespace PTAMM{
 		}
 
 		//debug
-		debug_os << "]\n";
+		//debug_os << "]\n";
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -478,7 +551,7 @@ namespace PTAMM{
 				cv::Mat source_transform_texsearch = current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
 			
 				//std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform, frame_snhmaps, frame_datas, bodypart_frame_cluster[i]);
-				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform_texsearch, frame_snhmaps, frame_datas, bodypart_precalculated_rotation_vectors[i], std::vector<std::vector<int>>());
+				std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform_texsearch, frame_snhmaps, frame_datas, bodypart_precalculated_rotation_vectors[i], bodypart_frame_cluster[i]);
 			
 				cv::Mat neutral_pts = (camera_matrix_current * source_transform).inv() * bodypart_pts;
 			
@@ -695,4 +768,109 @@ namespace PTAMM{
 			g->reset_cfw();
 		}
 	};
+}
+
+
+void load_packaged_file(std::string filename,
+	BodyPartDefinitionVector& bpdv,
+	std::vector<FrameDataProcessed>& frame_datas,
+	BodypartFrameCluster& bodypart_frame_cluster,
+	std::vector<std::vector<float>>& triangle_vertices,
+	std::vector<std::vector<unsigned int>>& triangle_indices,
+	std::vector<VoxelMatrix>& voxels, float& voxel_size){
+
+	cv::FileStorage savefile;
+	savefile.open(filename, cv::FileStorage::READ);
+
+	cv::FileNode bpdNode = savefile["bodypartdefinitions"];
+	bpdv.clear();
+	for (auto it = bpdNode.begin(); it != bpdNode.end(); ++it)
+	{
+		BodyPartDefinition bpd;
+		read(*it, bpd);
+		bpdv.push_back(bpd);
+	}
+
+	cv::FileNode frameNode = savefile["frame_datas"];
+	frame_datas.clear();
+	for (auto it = frameNode.begin(); it != frameNode.end(); ++it){
+		cv::Mat camera_pose, camera_matrix;
+		SkeletonNodeHard root;
+		int facing;
+		(*it)["camera_extrinsic"] >> camera_pose;
+		(*it)["camera_intrinsic_mat"] >> camera_matrix;
+		(*it)["skeleton"] >> root;
+		(*it)["facing"] >> facing;
+		FrameDataProcessed frame_data(bpdv.size(), 0, 0, camera_matrix, camera_pose, root);
+		frame_data.mnFacing = facing;
+		frame_datas.push_back(frame_data);
+	}
+
+	cv::FileNode clusterNode = savefile["bodypart_frame_cluster"];
+	bodypart_frame_cluster.clear();
+	bodypart_frame_cluster.resize(bpdv.size());
+	for (auto it = clusterNode.begin(); it != clusterNode.end(); ++it){
+		int bodypart;
+		(*it)["bodypart"] >> bodypart;
+		cv::FileNode clusterClusterNode = (*it)["clusters"];
+		for (auto it2 = clusterClusterNode.begin(); it2 != clusterClusterNode.end(); ++it2){
+			int main_frame;
+			(*it2)["main_frame"] >> main_frame;
+			std::vector<int> cluster;
+			cluster.push_back(main_frame);
+			bodypart_frame_cluster[bodypart].push_back(cluster);
+
+			CroppedMat image;
+			if ((*it2)["image"].empty()){
+				std::string image_path;
+				(*it2)["image_path"] >> image_path;
+				image.mMat = cv::imread(image_path);
+				(*it2)["image_offset"] >> image.mOffset;
+				(*it2)["image_size"] >> image.mSize;
+			}
+			else{
+				(*it2)["image"] >> image;
+			}
+
+			frame_datas[main_frame].mBodyPartImages.resize(bpdv.size());
+			frame_datas[main_frame].mBodyPartImages[bodypart] = image;
+		}
+	}
+
+	cv::FileNode vertNode = savefile["triangle_vertices"];
+	triangle_vertices.clear();
+	for (auto it = vertNode.begin(); it != vertNode.end(); ++it){
+		triangle_vertices.push_back(std::vector<float>());
+		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2){
+			float vert;
+			(*it2) >> vert;
+			triangle_vertices.back().push_back(vert);
+		}
+	}
+
+
+	cv::FileNode indNode = savefile["triangle_indices"];
+	triangle_indices.clear();
+	for (auto it = indNode.begin(); it != indNode.end(); ++it){
+		triangle_indices.push_back(std::vector<unsigned int>());
+		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2){
+			int ind;
+			(*it2) >> ind;
+			triangle_indices.back().push_back(ind);
+		}
+	}
+
+	cv::FileNode voxNode = savefile["voxels"];
+	voxels.clear();
+	for (auto it = voxNode.begin(); it != voxNode.end(); ++it){
+		int width, height, depth;
+		(*it)["width"] >> width;
+		(*it)["height"] >> height;
+		(*it)["depth"] >> depth;
+		voxels.push_back(VoxelMatrix(width, height, depth));
+	}
+
+	savefile["voxel_size"] >> voxel_size;
+
+	savefile.release();
 }

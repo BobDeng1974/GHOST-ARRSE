@@ -7,6 +7,7 @@
 
 #include <opencv2\opencv.hpp>
 #include <gh_common.h>
+#include <gh_search.h>
 #include <cv_skeleton.h>
 #include <ReconsVoxel.h>
 #include <gl\glew.h>
@@ -59,10 +60,11 @@ namespace PTAMM{
 		std::vector<std::vector<unsigned int>> triangle_indices;
 		std::vector<std::vector<unsigned char>> triangle_colors;
 
+		BodypartFrameCluster bodypart_frame_cluster;
 		std::vector<std::vector<cv::Vec3f>> bodypart_precalculated_rotation_vectors;
 		std::vector<SkeletonNodeHardMap> frame_snhmaps;
 
-		cv::Mat model_center, model_center_inv;
+		//cv::Mat model_center, model_center_inv;
 
 		bool debug_draw_skeleton, 
 			debug_shape_cylinders,

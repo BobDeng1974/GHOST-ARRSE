@@ -12,17 +12,11 @@
 
 #include <fstream>
 
-#define MAX_SEARCH 20
+#define MAX_SEARCH 16
+#define FILL_LIMIT 16
+#define FILL_NEIGHBORHOOD 5
 #define FRAMERATE 30
 
-
-void load_packaged_file(std::string filename,
-	BodyPartDefinitionVector& bpdv,
-	std::vector<FrameDataProcessed>& frame_datas,
-	BodypartFrameCluster& bodypart_frame_cluster,
-	std::vector<std::vector<float>>& triangle_vertices,
-	std::vector<std::vector<unsigned int>>& triangle_indices,
-	std::vector<VoxelMatrix>& voxels, float& voxel_size);
 
 namespace PTAMM{
 
@@ -579,8 +573,60 @@ namespace PTAMM{
 					neutral_pts = neutral_pts_occluded;
 					bodypart_pts_2d_v[i] = _2d_pts_occluded;
 				}
+
+				//fill holes
+
+
+				if (!bodypart_pts_2d_v[i].empty()){
+					bool up = true;
+
+					for (int iter = 0; iter < FILL_LIMIT && !bodypart_pts_2d_v[i].empty(); ++iter){
+
+						for (int _n = 0; _n < bodypart_pts_2d_v[i].size(); ++_n){
+
+							int n = up ? _n : bodypart_pts_2d_v[i].size() - _n - 1;
+
+							int npix = 0;
+							int px = bodypart_pts_2d_v[i][n].x;
+							int py = bodypart_pts_2d_v[i][n].y;
+
+							int av_b = 0, av_g = 0, av_r = 0;
+
+							for (int fx = -FILL_NEIGHBORHOOD; fx < FILL_NEIGHBORHOOD; ++fx){
+								for (int fy = -FILL_NEIGHBORHOOD; fy < FILL_NEIGHBORHOOD; ++fy){
+									int wx = px + fx;
+									int wy = py + fy;
+									if (CLAMP(wx, wy, output_img.cols, output_img.rows)){
+										const cv::Vec4b& color = output_img.ptr<cv::Vec4b>(wy)[wx];
+										if (color(3) > 0){
+											av_b += color(0);
+											av_g += color(1);
+											av_r += color(2);
+											++npix;
+										}
+									}
+								}
+							}
+
+							if (npix > 0){
+								av_b /= npix;
+								av_g /= npix;
+								av_r /= npix;
+
+								output_img.ptr<cv::Vec4b>(py)[px] = cv::Vec4b(av_b, av_g, av_r, 0xff);
+
+								bodypart_pts_2d_v[i].erase(bodypart_pts_2d_v[i].begin() + n);
+								--n;
+							}
+						}
+						up = !up;
+					}
+				}
+
+
 			}
-			
+
+
 			cv::Mat output_img_flip;
 			cv::flip(output_img, output_img_flip, 0);
 			
@@ -791,107 +837,3 @@ namespace PTAMM{
 	};
 }
 
-
-void load_packaged_file(std::string filename,
-	BodyPartDefinitionVector& bpdv,
-	std::vector<FrameDataProcessed>& frame_datas,
-	BodypartFrameCluster& bodypart_frame_cluster,
-	std::vector<std::vector<float>>& triangle_vertices,
-	std::vector<std::vector<unsigned int>>& triangle_indices,
-	std::vector<VoxelMatrix>& voxels, float& voxel_size){
-
-	cv::FileStorage savefile;
-	savefile.open(filename, cv::FileStorage::READ);
-
-	cv::FileNode bpdNode = savefile["bodypartdefinitions"];
-	bpdv.clear();
-	for (auto it = bpdNode.begin(); it != bpdNode.end(); ++it)
-	{
-		BodyPartDefinition bpd;
-		read(*it, bpd);
-		bpdv.push_back(bpd);
-	}
-
-	cv::FileNode frameNode = savefile["frame_datas"];
-	frame_datas.clear();
-	for (auto it = frameNode.begin(); it != frameNode.end(); ++it){
-		cv::Mat camera_pose, camera_matrix;
-		SkeletonNodeHard root;
-		int facing;
-		(*it)["camera_extrinsic"] >> camera_pose;
-		(*it)["camera_intrinsic_mat"] >> camera_matrix;
-		(*it)["skeleton"] >> root;
-		(*it)["facing"] >> facing;
-		FrameDataProcessed frame_data(bpdv.size(), 0, 0, camera_matrix, camera_pose, root);
-		frame_data.mnFacing = facing;
-		frame_datas.push_back(frame_data);
-	}
-
-	cv::FileNode clusterNode = savefile["bodypart_frame_cluster"];
-	bodypart_frame_cluster.clear();
-	bodypart_frame_cluster.resize(bpdv.size());
-	for (auto it = clusterNode.begin(); it != clusterNode.end(); ++it){
-		int bodypart;
-		(*it)["bodypart"] >> bodypart;
-		cv::FileNode clusterClusterNode = (*it)["clusters"];
-		for (auto it2 = clusterClusterNode.begin(); it2 != clusterClusterNode.end(); ++it2){
-			int main_frame;
-			(*it2)["main_frame"] >> main_frame;
-			std::vector<int> cluster;
-			cluster.push_back(main_frame);
-			bodypart_frame_cluster[bodypart].push_back(cluster);
-
-			CroppedMat image;
-			if ((*it2)["image"].empty()){
-				std::string image_path;
-				(*it2)["image_path"] >> image_path;
-				image.mMat = cv::imread(image_path);
-				(*it2)["image_offset"] >> image.mOffset;
-				(*it2)["image_size"] >> image.mSize;
-			}
-			else{
-				(*it2)["image"] >> image;
-			}
-
-			frame_datas[main_frame].mBodyPartImages.resize(bpdv.size());
-			frame_datas[main_frame].mBodyPartImages[bodypart] = image;
-		}
-	}
-
-	cv::FileNode vertNode = savefile["triangle_vertices"];
-	triangle_vertices.clear();
-	for (auto it = vertNode.begin(); it != vertNode.end(); ++it){
-		triangle_vertices.push_back(std::vector<float>());
-		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2){
-			float vert;
-			(*it2) >> vert;
-			triangle_vertices.back().push_back(vert);
-		}
-	}
-
-
-	cv::FileNode indNode = savefile["triangle_indices"];
-	triangle_indices.clear();
-	for (auto it = indNode.begin(); it != indNode.end(); ++it){
-		triangle_indices.push_back(std::vector<unsigned int>());
-		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2){
-			int ind;
-			(*it2) >> ind;
-			triangle_indices.back().push_back(ind);
-		}
-	}
-
-	cv::FileNode voxNode = savefile["voxels"];
-	voxels.clear();
-	for (auto it = voxNode.begin(); it != voxNode.end(); ++it){
-		int width, height, depth;
-		(*it)["width"] >> width;
-		(*it)["height"] >> height;
-		(*it)["depth"] >> depth;
-		voxels.push_back(VoxelMatrix(width, height, depth));
-	}
-
-	savefile["voxel_size"] >> voxel_size;
-
-	savefile.release();
-}

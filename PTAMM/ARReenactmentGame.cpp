@@ -580,7 +580,7 @@ namespace PTAMM{
 					std::vector<cv::Point2i> _2d_pts_occluded;
 			
 					inverse_point_mapping(neutral_pts, bodypart_pts_2d_v[i], frame_datas[best_frame].mCameraMatrix, target_transform,
-						frame_datas[best_frame].mBodyPartImages[i].mMat, frame_datas[best_frame].mBodyPartImages[i].mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, debug_inspect_texture_map);
+						frame_datas[best_frame].mBodyPartImages[i].mMat, frame_datas[best_frame].mBodyPartImages[i].mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, !debug_shape_cylinders, debug_inspect_texture_map);
 			
 					neutral_pts = neutral_pts_occluded;
 					bodypart_pts_2d_v[i] = _2d_pts_occluded;

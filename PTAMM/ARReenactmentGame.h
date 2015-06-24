@@ -72,6 +72,8 @@ namespace PTAMM{
 			debug_show_volumes,
 			debug_inspect_texture_map;
 
+		GLUquadric * quadric;
+
 		FBO fbo1;
 
 		cv::Mat opengl_projection, camera_matrix_current;
@@ -91,5 +93,7 @@ namespace PTAMM{
 		float secret_offset; //sshhh!
 
 		std::string PTAMM_map_path;
+
+
 	};
 }

@@ -10,6 +10,8 @@
 #include <gh_search.h>
 #include <gh_render.h>
 
+#include "cylinder.h"
+
 #include <fstream>
 
 #define MAX_SEARCH 16
@@ -50,6 +52,7 @@ namespace PTAMM{
 	{
 		debug_print_dir = generate_debug_print_dir();
 		CreateDirectory(debug_print_dir.c_str(), nullptr);
+		quadric = gluNewQuadric();
 	}
 
 	ARReenactmentGame::~ARReenactmentGame(){
@@ -57,6 +60,8 @@ namespace PTAMM{
 		GVars3::GUI.UnRegisterCommand("ARR_PrevSection");
 		GVars3::GUI.UnRegisterCommand("ARR_StartFrame");
 		GVars3::GUI.UnRegisterCommand("ARR_Pause");
+
+		gluDeleteQuadric(quadric);
 	}
 
 	void ARReenactmentGame::Reset(){
@@ -99,12 +104,15 @@ namespace PTAMM{
 		static GVars3::gvar3<std::string> gv_package_directory("ARReenactmentPackage", "", GVars3::SILENT);
 		static GVars3::gvar3<std::string> gv_sectionframes_directory("ARReenactmentSectionFrames", "", GVars3::SILENT);
 		static GVars3::gvar3<int> gv_secret_offset("ARReenactmentSecretOffset", 0, GVars3::SILENT);
+		static GVars3::gvar3<int> gv_draw_cylinders("ARReenactmentDrawCylinders", 0, GVars3::SILENT);
 		//TODO: extra data file specifically for the AR Reenactment (e.g. sections)
 
 		std::string package_directory = *gv_package_directory;
 		secret_offset = *gv_secret_offset;
 
 		cv::FileStorage fs;
+
+		debug_shape_cylinders = *gv_draw_cylinders==1;
 
 		if (package_directory == ""){
 //
@@ -243,7 +251,7 @@ namespace PTAMM{
 		}
 		else{
 
-			load_packaged_file(package_directory, bodypart_definitions, frame_datas, bodypart_frame_cluster, triangle_vertices, triangle_indices, bodypart_voxels, voxel_size);
+			load_packaged_file(package_directory, bodypart_definitions, frame_datas, bodypart_frame_cluster, triangle_vertices, triangle_indices, bodypart_voxels, voxel_size, bodypart_cylinders);
 			triangle_colors.resize(bodypart_definitions.size());
 			for (int i = 0; i < bodypart_definitions.size(); ++i){
 				for (int j = 0; j < triangle_indices[i].size(); ++j){
@@ -463,14 +471,14 @@ namespace PTAMM{
 
 			if (debug_shape_cylinders){
 
-				//cv::Mat transform_t = (get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose)).t();
-				//glMultMatrixf(transform_t.ptr<float>());
-				//
-				//glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
-				//glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
-				//glColor3fv(bodypart_definitions[i].mColor);
-				//
-				//renderCylinder(0, 0, 0, 0, voxels[i].height * voxel_size, 0, cylinders[i].width, 16, quadric);
+				cv::Mat transform_t = (get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose)).t();
+				glMultMatrixf(transform_t.ptr<float>());
+				
+				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
+				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
+				glColor3fv(bodypart_definitions[i].mColor);
+				
+				renderCylinder(0, 0, 0, 0, bodypart_voxels[i].height * voxel_size, 0, bodypart_cylinders[i].width, 16, quadric);
 
 			}
 			else{

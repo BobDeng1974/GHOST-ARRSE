@@ -127,6 +127,7 @@
     <ClInclude Include="ATANCamera.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="Bundle.h" />
+    <ClInclude Include="cylinder.h" />
     <ClInclude Include="EyeGame.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Games.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="ARReenactmentGame.cpp" />
     <ClCompile Include="ATANCamera.cc" />
     <ClCompile Include="Bundle.cc" />
+    <ClCompile Include="cylinder.cpp" />
     <ClCompile Include="EyeGame.cc" />
     <ClCompile Include="Games.cc" />
     <ClCompile Include="GhostGame.cpp" />

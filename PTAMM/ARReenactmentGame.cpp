@@ -734,6 +734,9 @@ namespace PTAMM{
 			secret_offset -= 1;
 			opengl_projection = cv::Mat();
 			break;
+		case 'c':
+			debug_shape_cylinders = !debug_shape_cylinders;
+			break;
 		}
 	}
 	void ARReenactmentGame::Advance(){

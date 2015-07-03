@@ -476,7 +476,7 @@ namespace PTAMM{
 				
 				glVertexPointer(3, GL_FLOAT, 0, triangle_vertices[i].data());
 				glColorPointer(3, GL_UNSIGNED_BYTE, 0, triangle_colors[i].data());
-				glColor3fv(bodypart_definitions[i].mColor);
+				glColor3ubv(&(bp_colors[i][0]));
 				
 				renderCylinder(0, 0, 0, 0, bodypart_voxels[i].height * voxel_size, 0, bodypart_cylinders[i].width, 16, quadric);
 

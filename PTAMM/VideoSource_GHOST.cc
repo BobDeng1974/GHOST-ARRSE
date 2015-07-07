@@ -281,6 +281,8 @@ VideoSource::VideoSource()
 	mirSize.y = CAPTURE_SIZE_Y;
 
 	refreshVidDirectory();
+
+	CreateDirectory(dumpPath.c_str(), NULL);
 };
 
 VideoSource::~VideoSource()
@@ -687,6 +689,9 @@ void GUICommandCallback(void *ptr, string sCommand, string sParams){
 	if (sCommand == "GH_CaptureReset"){
 		vs->setFrame(1);
 	}
+	else if (sCommand == "GH_CapturePause"){
+		vs->togglePause();
+	}
 }
 
 int num_length(std::string a, int num_start){
@@ -788,6 +793,10 @@ VideoSource::VideoSource()//: cam(1)
 	elapsed = 0;
 
 	refreshVidDirectory();
+
+	GUI.RegisterCommand("GH_CaptureReset", GUICommandCallback, this);
+	GUI.RegisterCommand("GH_CapturePause", GUICommandCallback, this);
+	play = true;
 };
 
 VideoSource::~VideoSource()
@@ -797,6 +806,10 @@ VideoSource::~VideoSource()
 void VideoSource::setFrame(int f){
 	currFrame = f;
 };
+
+void VideoSource::togglePause(){
+	play = !play;
+}
 
 //copied from GhostGame.cpp
 void VideoSource::refreshVidDirectory(){
@@ -820,7 +833,9 @@ void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb
 
 	if (temp < 0) temp = 0;
 
-	elapsed += temp;
+	if (play)
+		elapsed += temp;
+
 	prevtime = time;
 
 	while (elapsed >= (1000 / FRAMERATE))

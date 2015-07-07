@@ -50,6 +50,7 @@ public:
 	CVD::ImageRef Size();
 
 	void setFrame(int);
+	void togglePause();
 
 private:
 	void refreshVidDirectory();
@@ -68,7 +69,7 @@ private:
 
 	//current frame for file loading
 	int currFrame; 
-
+	bool play;
 	
 	int elapsed;
 	SYSTEMTIME prevtime;

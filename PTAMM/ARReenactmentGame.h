@@ -14,6 +14,8 @@
 #include <fbolib.h>
 #include "ATANCamera.h"
 
+//#define DEBUG_OUT
+
 namespace PTAMM{
 	class ARReenactmentGame :public Game{
 	public:

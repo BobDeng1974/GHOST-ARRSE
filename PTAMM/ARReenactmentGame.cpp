@@ -22,6 +22,7 @@
 
 namespace PTAMM{
 
+#ifdef DEBUG_OUT
 	std::string debug_print_dir;
 
 	std::string generate_debug_print_dir(){
@@ -34,6 +35,7 @@ namespace PTAMM{
 		return ss.str();
 	}
 
+#endif
 
 	ARReenactmentGame::ARReenactmentGame()
 		:Game("AR Reenactment"),
@@ -50,8 +52,12 @@ namespace PTAMM{
 		secret_offset(0),
 		PTAMM_map_path("")
 	{
+
+#ifdef DEBUG_OUT
 		debug_print_dir = generate_debug_print_dir();
 		CreateDirectory(debug_print_dir.c_str(), nullptr);
+#endif
+
 		quadric = gluNewQuadric();
 	}
 

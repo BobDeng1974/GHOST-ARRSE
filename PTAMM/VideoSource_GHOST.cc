@@ -279,6 +279,8 @@ VideoSource::VideoSource()
 
 	mirSize.x = CAPTURE_SIZE_X;
 	mirSize.y = CAPTURE_SIZE_Y;
+
+	refreshVidDirectory();
 };
 
 VideoSource::~VideoSource()
@@ -286,6 +288,19 @@ VideoSource::~VideoSource()
     delete[] m_buffer;
     delete[] m_buffer2;
 }
+
+
+void VideoSource::refreshVidDirectory(){
+	time_t t = time(0);
+	struct tm now;
+	localtime_s(&now, &t);
+	char buf[100];
+
+	sprintf_s(buf, "kinectdump-%d-%d-%d-%02d%02d", now.tm_year + 1900, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_sec);
+
+	dumpPath = std::string(buf);
+};
+
 
 void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb<CVD::byte> > &imRGB)
 {
@@ -374,6 +389,15 @@ void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb
 			}
 		}
 
+
+		static GVars3::gvar3<int> gv_record_input("CamRecord", 0, GVars3::SILENT);
+
+		if (*gv_record_input){
+			static int save_frame_counter = 0;
+			cv::Mat rgb(mirSize.y, mirSize.x, CV_8UC3, m_buffer);
+			cv::imwrite(dumpPath + "/" + to_string(save_frame_counter) + ".png", rgb);
+			++save_frame_counter;
+		}
 	}
 
 }
@@ -553,6 +577,8 @@ VideoSource::VideoSource()//: cam(1)
 	elapsed = 0;
 
 	refreshVidDirectory();
+
+	CreateDirectory(dumpPath.c_str(), NULL);
 };
 
 VideoSource::~VideoSource()
@@ -569,7 +595,7 @@ void VideoSource::refreshVidDirectory(){
 	struct tm now;
 	localtime_s(&now, &t);
 	char buf[100];
-
+	
 	sprintf_s(buf, "kinectdump-%d-%d-%d-%02d%02d", now.tm_year + 1900, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_sec);
 
 	dumpPath = std::string(buf);
@@ -617,9 +643,17 @@ void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb
 			imBW[y][x] = rgb.ptr<cv::Vec4b>(y)[x](1);
 			imRGB[y][x].red = rgb.ptr<cv::Vec4b>(y)[x](2);
 
+			rgb.ptr<cv::Vec4b>(y)[x](3) = 0xff;
 		}
 	}
 
+	static GVars3::gvar3<int> gv_record_input("CamRecord", 0, GVars3::SILENT);
+
+	if (*gv_record_input){
+		static int save_frame_counter = 0;
+		cv::imwrite(dumpPath + "/" + to_string(save_frame_counter) + ".png", rgb);
+		++save_frame_counter;
+	}
 }
 
 ImageRef VideoSource::Size()
@@ -634,6 +668,8 @@ ImageRef VideoSource::Size()
 #define WIN32_LEAN_AND_MEAN
 #include "VideoSource.h"
 #include <Windows.h>
+#include <Shlwapi.h>
+#include <tchar.h>
 #include <cvd\utility.h>
 #include <opencv2\opencv.hpp>
 
@@ -643,6 +679,7 @@ using namespace CVD;
 using namespace std;
 using namespace GVars3;
 
+std::string files_path = "";
 std::vector<std::string> filenames;
 
 void GUICommandCallback(void *ptr, string sCommand, string sParams){
@@ -652,18 +689,97 @@ void GUICommandCallback(void *ptr, string sCommand, string sParams){
 	}
 }
 
-VideoSource::VideoSource()//: cam(1)
-{
-	std::stringstream filename_ss;
+int num_length(std::string a, int num_start){
+	int i = num_start;
+	while (true){
+		if ('0' <= a[i] && '9' >= a[i]){
+			i++;
+		}
+		else{
+			break;
+		}
+	}
+	return i - num_start;
+}
 
-	for (int i = 0; i < 500; ++i){
-		filename_ss.str("");
-		filename_ss << "G:/debug2013/calib1/rgbx" << i << ".png";
-		filenames.push_back(filename_ss.str());
+bool strcmp_logical(std::string a, std::string b){
+	int i = 0, j = 0;
+	for (; i < a.size() && j < b.size(); ++i, ++j){
+		//check if both a[i] and b[j] are numbers
+		int a_num_ln = num_length(a, i);
+		int b_num_ln = num_length(b, j);
+
+		if (a_num_ln > 0 && b_num_ln > 0){
+			int a_num = atoi(a.substr(i, a_num_ln).c_str());
+			int b_num = atoi(b.substr(j, b_num_ln).c_str());
+
+			if (a_num > b_num){
+				return false;
+			}
+			else if (a_num < b_num){
+				return true;
+			}
+		}
+		else{
+			if (a[i] > b[i]){
+				return false;
+			}
+			else if (a[i] < b[i]){
+				return true;
+			}
+		}
+
+		i += std::max(0, a_num_ln - 1);
+		j += std::max(0, b_num_ln - 1);
 	}
 
-	mirSize.x = 512;
-	mirSize.y = 424;
+	if (i < a.size()){
+		return true;
+	}
+	else if (j < b.size()){
+		return false;
+	}
+	
+	return i < j;
+}
+
+VideoSource::VideoSource()//: cam(1)
+{
+
+	GVars3::GUI.LoadFile("filesource.cfg");
+	static GVars3::gvar3<std::string> gv_filesource("FileSource", "", GVars3::SILENT);
+
+	{
+		WIN32_FIND_DATA ffd;
+		HANDLE find;
+
+		find = FindFirstFile((*gv_filesource + "\\*").c_str(), &ffd);
+
+		if (INVALID_HANDLE_VALUE == find)
+		{
+			std::cout << "File video source: no files found\n";
+		}
+
+
+		do{
+			if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)){
+				//file found; analyze it and file it correctly
+
+				std::string filename(ffd.cFileName);
+				filenames.push_back(filename);
+			}
+		} while (FindNextFile(find, &ffd) != 0);
+
+		std::sort(filenames.begin(), filenames.end(), strcmp_logical);
+	}
+	
+	if (!filenames.empty()){
+		files_path = *gv_filesource + "\\";
+		cv::Mat f1 = cv::imread(files_path + filenames[0]);
+
+		mirSize.x = f1.cols;
+		mirSize.y = f1.rows;
+	}
 
 	currFrame = 1;
 	currOut = 1;
@@ -713,7 +829,7 @@ void VideoSource::GetAndFillFrameBWandRGB(Image<CVD::byte> &imBW, Image<CVD::Rgb
 		elapsed -= (1000 / FRAMERATE);
 	}
 
-	cv::Mat rgb = cv::imread(filenames[currFrame%filenames.size()]);
+	cv::Mat rgb = cv::imread(files_path + filenames[currFrame%filenames.size()]);
 
 	mirSize.x = rgb.cols;
 	mirSize.y = rgb.rows;

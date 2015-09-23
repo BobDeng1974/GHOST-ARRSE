@@ -574,6 +574,23 @@ namespace PTAMM{
 					//,maybe just global vars
 
 					cv::Mat source_transform = current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
+
+					if (debug_shape_cylinders){
+						//remove the y-rotation
+						cv::Vec3f axis_endpoint = source_transform(cv::Range(0, 3), cv::Range(3, 4));
+						cv::Vec3f axis_direction = source_transform(cv::Range(0, 3), cv::Range(1, 2));
+						cv::Vec3f front_vector = axis_direction.cross((-axis_endpoint).cross(axis_direction));
+						cv::Vec3f side_vector = axis_direction.cross(front_vector);
+
+						source_transform.ptr<float>(0)[2] = front_vector(0);
+						source_transform.ptr<float>(1)[2] = front_vector(1);
+						source_transform.ptr<float>(2)[2] = front_vector(2);
+
+						source_transform.ptr<float>(0)[0] = side_vector(0);
+						source_transform.ptr<float>(1)[0] = side_vector(1);
+						source_transform.ptr<float>(2)[0] = side_vector(2);
+					}
+
 					cv::Mat source_transform_texsearch = flip_x * current_transform * get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[anim_frame], frame_datas[anim_frame].mCameraPose);
 
 					//std::vector<unsigned int> best_frames = sort_best_frames(bodypart_definitions[i], source_transform, frame_snhmaps, frame_datas, bodypart_frame_cluster[i]);
@@ -593,11 +610,36 @@ namespace PTAMM{
 						cv::Mat target_transform = get_bodypart_transform(bodypart_definitions[i], frame_snhmaps[best_frame], frame_datas[best_frame].mCameraPose);
 						//cv::Mat bodypart_img_uncropped = uncrop_mat(frame_datas[best_frame].mBodyPartImages[i], cv::Vec3b(0xff, 0xff, 0xff));
 
+
+						if (debug_shape_cylinders){
+
+							//remove the y-rotation
+							cv::Vec3f axis_endpoint = target_transform(cv::Range(0, 3), cv::Range(3, 4));
+							cv::Vec3f axis_direction = target_transform(cv::Range(0, 3), cv::Range(1, 2));
+							cv::Vec3f front_vector = axis_direction.cross((-axis_endpoint).cross(axis_direction));
+							cv::Vec3f side_vector = axis_direction.cross(front_vector);
+
+							target_transform.ptr<float>(0)[2] = front_vector(0);
+							target_transform.ptr<float>(1)[2] = front_vector(1);
+							target_transform.ptr<float>(2)[2] = front_vector(2);
+
+							target_transform.ptr<float>(0)[0] = side_vector(0);
+							target_transform.ptr<float>(1)[0] = side_vector(1);
+							target_transform.ptr<float>(2)[0] = side_vector(2);
+						}
+
 						cv::Mat neutral_pts_occluded;
 						std::vector<cv::Point2i> _2d_pts_occluded;
 
-						inverse_point_mapping(neutral_pts, bodypart_pts_2d_v[i], frame_datas[best_frame].mCameraMatrix, target_transform,
-							frame_datas[best_frame].mBodyPartImages[i].mMat, frame_datas[best_frame].mBodyPartImages[i].mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, !debug_shape_cylinders, debug_inspect_texture_map);
+						if (debug_shape_cylinders){
+							inverse_point_mapping(neutral_pts, bodypart_pts_2d_v[i], frame_datas[best_frame].mCameraMatrix, target_transform,
+								frame_datas[best_frame].mBodyImage.mMat, frame_datas[best_frame].mBodyImage.mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, !debug_shape_cylinders, debug_inspect_texture_map);
+
+						}
+						else{
+							inverse_point_mapping(neutral_pts, bodypart_pts_2d_v[i], frame_datas[best_frame].mCameraMatrix, target_transform,
+								frame_datas[best_frame].mBodyPartImages[i].mMat, frame_datas[best_frame].mBodyPartImages[i].mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, !debug_shape_cylinders, debug_inspect_texture_map);
+						}
 
 						bodypart_pts_2d_v[i] = _2d_pts_occluded;
 						if (!_2d_pts_occluded.empty()){

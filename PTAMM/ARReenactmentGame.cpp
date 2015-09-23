@@ -543,7 +543,10 @@ namespace PTAMM{
 						cv::Vec3b& orig_color = render_pretexture.ptr<cv::Vec3b>(y)[x];
 						if (orig_color == bg_color) continue;
 						for (int i = 0; i < bodypart_definitions.size(); ++i){
-							if (orig_color == bp_colors[i]){
+							if (orig_color(0) == (unsigned char)(bp_colors[i][0]) &&
+								orig_color(1) == (unsigned char)(bp_colors[i][1]) &&
+								orig_color(2) == (unsigned char)(bp_colors[i][2])
+								){
 								float depth = render_depth.ptr<float>(y)[x];
 								bodypart_pts_2d_withdepth_v[i].push_back(cv::Vec4f(depth*x, depth*y,
 									depth, 1));
@@ -596,8 +599,13 @@ namespace PTAMM{
 						inverse_point_mapping(neutral_pts, bodypart_pts_2d_v[i], frame_datas[best_frame].mCameraMatrix, target_transform,
 							frame_datas[best_frame].mBodyPartImages[i].mMat, frame_datas[best_frame].mBodyPartImages[i].mOffset, output_img, neutral_pts_occluded, _2d_pts_occluded, !debug_shape_cylinders, debug_inspect_texture_map);
 
-						neutral_pts = neutral_pts_occluded;
 						bodypart_pts_2d_v[i] = _2d_pts_occluded;
+						if (!_2d_pts_occluded.empty()){
+							neutral_pts = neutral_pts_occluded(cv::Range(0, 4), cv::Range(0, _2d_pts_occluded.size()));
+						}
+						else{
+							break;
+						}
 					}
 
 					//fill holes
